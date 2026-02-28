@@ -1,0 +1,9 @@
+<div>
+    <nav>
+        @for (routingButton of routingButtons(); track routingButton) {
+            <li [routerLink]="routingButton.rout">
+                <div class="button-container"><img><p class="button-label"> {{ routingButton.text }} </p></div>
+            </li>
+        }
+    </nav>
+</div>
