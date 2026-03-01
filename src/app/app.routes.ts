@@ -1,18 +1,28 @@
 import { Routes } from '@angular/router';
+import { ProductList } from './components/product-list/product-list';
+import { LoginForm } from './components/login-form/login-form';
+import { LogoutForm } from './components/logout-form/logout-form';
+import { OrderList } from './components/order-list/order-list';
 
 export const routes: Routes = [
     {
-        path: "login",
+        path: "",
         pathMatch: "full",
-        loadComponent: () => {
-            return import("./components/login-form/login-form").then((m) => m.LoginForm);
-        }
+        component: LoginForm
     },
     {
         path: "products",
         pathMatch: "full",
-        loadComponent: () => {
-            return import("./components/product-list/product-list").then((m) => m.ProductList);
-        }
+        component: ProductList
+    },
+    {
+        path: "orders",
+        pathMatch: "full",
+        component: OrderList
+    },
+    {
+        path: "logout",
+        pathMatch: "full",
+        component: LogoutForm
     }
 ];

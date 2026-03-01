@@ -1,0 +1,20 @@
+<nav class="navbar">
+  <div class="nav-container">
+    <div class="nav-logo">
+      <img src="/icons/Icon.png">ООО «Обувь»
+    </div>
+    @if(isAuthenticated()) {
+      <div class="nav-menu">
+        @if(hasAuthority("VIEW_PRODUCTS")) {
+          <button class="nav-button" routerLink="/products">Магазин</button>
+        }
+        @if(hasAuthority("VIEW_USER_ORDERS")) {
+          <button class="nav-button" routerLink="/orders">Заказы</button>
+        }
+      </div>
+      <div class="nav-logout">
+        <button class="auth-button" routerLink="/logout">Профиль</button>
+      </div>
+    }
+  </div>
+</nav>

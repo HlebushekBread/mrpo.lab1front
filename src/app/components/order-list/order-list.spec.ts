@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { NavigationPanel } from './navigation-panel';
+import { OrderList } from './order-list';
 
-describe('NavigationPanel', () => {
-  let component: NavigationPanel;
-  let fixture: ComponentFixture<NavigationPanel>;
+describe('OrderList', () => {
+  let component: OrderList;
+  let fixture: ComponentFixture<OrderList>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NavigationPanel],
+      imports: [OrderList],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(NavigationPanel);
+    fixture = TestBed.createComponent(OrderList);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

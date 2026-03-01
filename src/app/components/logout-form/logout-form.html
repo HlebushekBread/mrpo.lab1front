@@ -1,0 +1,16 @@
+<div class="form-container">
+    <form class="main-form" (submit)="logout()">
+        <p>
+            Вы вошли как:
+        </p>
+        <p class="name">
+            {{ fullName() }}
+        </p>
+        @if(role() != fullName()) {
+            <p class="role">
+                {{ role() }}
+            </p>
+        }
+        <input type="submit" value="Выход">
+    </form>
+</div>

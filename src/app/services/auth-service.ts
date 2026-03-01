@@ -1,37 +1,97 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, inject } from '@angular/core';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { inject, Injectable } from '@angular/core';
+import { BehaviorSubject, tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
-  private readonly jwtToken = "token";
-  private loggedUser?: string;
-  private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
-
   private http = inject(HttpClient);
 
-  constructor() {}
-
-  login(user:{username: string, password: string}): Observable<any>{
-    return this.http.post('localhost:8080/api/auth/login', user).pipe(
-      tap((tokens) => this.doLoginUser(user.username, tokens))
-    )
+  login(user:{username: string, password: string}){
+    return this.http.post('http://localhost:8080/api/auth/login', user).pipe(
+      tap(response => {
+        this.doLoginUser(response);
+      })
+    );
   }
 
-  private doLoginUser(username: string, tokens: any){
-    this.loggedUser = username;
-    this.storeJwtToken(tokens.jwt);
-    this.isAuthenticatedSubject.next(true);
-  }
-
-  private storeJwtToken(jwt: string){
-    localStorage.setItem(this.jwtToken, jwt);
+  private doLoginUser(token: any){
+    localStorage.setItem('jwtToken', token.token);
   }
 
   logout(){
-    localStorage.removeItem(this.jwtToken);
-    this.isAuthenticatedSubject.next(false);
+    localStorage.removeItem('jwtToken');
+  }
+
+  getTokenPayload(){
+    const token = localStorage.getItem('jwtToken');
+    if (!token) { return null; }
+
+    try {
+      const parts = token.split('.');
+      if (parts.length !== 3) {
+        return null;
+      }
+
+      let payloadBase64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+      while (payloadBase64.length % 4 !== 0) {
+        payloadBase64 += '=';
+      }
+
+      const binaryString = window.atob(payloadBase64);
+      const bytes = new Uint8Array(binaryString.length);
+      for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+      }
+
+      const payload = new TextDecoder('utf-8').decode(bytes);
+      return JSON.parse(payload);
+
+    } catch (error) {
+      console.error('Ошибка при декодировании токена: ', error);
+      return null;
+    }
+  }
+
+  private tokenPayload = this.getTokenPayload();
+
+  getTokenFullName(){
+    try{
+      return this.tokenPayload.fullName;
+    }catch(err){
+      return ''
+    }
+  }
+  
+  getTokenRole(){
+    try{
+      return this.tokenPayload.role;
+    }catch(err){
+      return "Неавторизованный";
+    }
+  }
+
+  getTokenAuthorities(){
+    try{
+      return this.tokenPayload.authorities;
+    }catch(err){
+      return [];
+    }
+  }
+
+  getTokenExpirationDate(){
+    try{
+      return this.tokenPayload.exp * 1000;
+    }catch(err){
+      return 0;
+    }
+  }
+
+  isAuthenticated(): boolean{
+    if(localStorage.getItem('jwtToken') && this.getTokenExpirationDate() > Date.now()){
+      return true;
+    }
+    return false;
   }
 }

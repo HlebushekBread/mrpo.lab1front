@@ -4,7 +4,6 @@ $text-color: #333;
 $border-color: #ddd;
 $bg-color: #fff;
 $border-radius: 15px;
-$font-family: 'Times New Roman', Times, serif;
 
 .form-container {
   transform: translateY(-10%);
@@ -13,7 +12,7 @@ $font-family: 'Times New Roman', Times, serif;
   align-items: center;
   min-height: 100vh;
   background-color: $bg-color;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  $font-family: 'Times New Roman', Times, serif;
 
   .main-form {
     background: #fff;
@@ -23,46 +22,23 @@ $font-family: 'Times New Roman', Times, serif;
     width: 100%;
     max-width: 400px;
 
-    .guest-form {
-        max-width: 400px;
-    }
-
     p {
+      margin-top: 0;
       text-align: center;
-      font-family: $font-family;
       font-size: 1.2rem;
-      font-weight: bold;
     }
 
-    div {
-      margin-bottom: 1.5rem;
+    .name {
+
+        text-align: center;
+        font-size: 1.5rem;
+        font-weight: bold;
     }
 
-    label {
-      display: block;
-      margin-bottom: 0.5rem;
-      font-family: $font-family;
-      font-size: 1.2rem;
-      font-weight: 600;
-      color: $text-color;
-    }
-
-    input[type="text"],
-    input[type="password"] {
-      width: 100%;
-      padding: 0.75rem;
-      border: 1px solid $border-color;
-      border-radius: $border-radius / 2;
-      font-family: $font-family;
-      font-size: 1.2rem;
-      box-sizing: border-box; // Чтобы padding не увеличивал ширину
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
-
-      &:focus {
-        outline: none;
-        border-color: $primary-color;
-        box-shadow: 0 0 0 3px rgba($primary-color, 0.2);
-      }
+    .role {
+        text-align: center;
+        font-size: 1.2rem;
+        font-weight: bold;
     }
 
     input[type="submit"] {

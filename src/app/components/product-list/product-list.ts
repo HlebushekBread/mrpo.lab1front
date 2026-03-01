@@ -1,23 +1,16 @@
-import { Component, OnInit, Signal, signal } from '@angular/core';
-import { ProductComponent } from "../product-component/product-component";
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { ProductService } from "../../services/product-service";
+import { CommonModule } from '@angular/common';
+import { ProductComponent } from './product-component/product-component';
 
 @Component({
   selector: 'app-product-list',
-  imports: [ProductComponent],
+  imports: [ProductComponent, CommonModule],
   templateUrl: './product-list.html',
   styleUrl: './product-list.scss',
 })
-export class ProductList implements OnInit{
-  constructor(private productService: ProductService) {}
-  
-  productList: any;
+export class ProductList{
+  private productService = inject(ProductService);
 
-  ngOnInit(): void {
-    this.getProductList();
-  }
-
-  getProductList() {
-    this.productList = this.productService.getAll();
-  }
+  productList$ = this.productService.getAll();
 }
