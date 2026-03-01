@@ -1,4 +1,9 @@
 <div class="form-container">
+    @if(errorMessage() != "") {
+        <div class="error-container">
+            Ошибка: Неверное имя пользователя или пароль
+        </div>
+    }
     <form class="main-form" [formGroup]="loginForm" (submit)="login()">
         <div>
             <label for="usernameInput"> Имя пользователя (почта): </label>
@@ -21,4 +26,4 @@
     <p>Admin   94d5ous@gmail.com    uzWC67</p>
     <p>Manager 1diph5e@tutanota.com 8ntwUp</p>
     <p>User    5d4zbu@tutanota.com  rwVDh9</p>
-</div>  
+</div>

@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { AuthService } from '../../services/auth-service';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -14,6 +14,8 @@ import { pipe, take } from 'rxjs';
 export class LoginForm implements OnInit{
   private authService = inject(AuthService);
   private router = inject(Router)
+
+  errorMessage = signal("");
 
   loginForm = new FormGroup({
     username: new FormControl('', [Validators.required]),
@@ -37,7 +39,7 @@ export class LoginForm implements OnInit{
         window.location.reload();
       },
       error: (err) => {
-        console.error('Ошибка логина', err);
+        this.errorMessage.set("Ошибка: Неверное имя пользователя или пароль");
       }
     });
   }
@@ -51,7 +53,7 @@ export class LoginForm implements OnInit{
         window.location.reload();
       },
       error: (err) => {
-        console.error('Ошибка логина', err);
+        this.errorMessage.set("Ошибка: Внутренняя ошибка сервера");
       }
     });
   }
