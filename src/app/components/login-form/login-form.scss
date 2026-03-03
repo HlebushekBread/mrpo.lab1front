@@ -73,8 +73,8 @@ $font-family: 'Times New Roman', Times, serif;
 
       &:focus {
         outline: none;
-        border-color: $primary-color;
-        box-shadow: 0 0 0 3px rgba($primary-color, 0.2);
+        border-color: $accent-color;
+        box-shadow: 0 0 0 3px rgba($accent-color, 0.2);
       }
     }
 
@@ -93,6 +93,7 @@ $font-family: 'Times New Roman', Times, serif;
 
       &:hover {
         background-color: $accent-color;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       }
 
       &:active {

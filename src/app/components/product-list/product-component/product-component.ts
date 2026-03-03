@@ -10,4 +10,6 @@ import { CommonModule } from '@angular/common';
 })
 export class ProductComponent {
   @Input() product!: Product;
+
+  navigationState = history.state;
 }

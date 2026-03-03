@@ -1,23 +1,47 @@
-<div class="grid-container">
-    <div class="order-info">
-        Заказ <b>#{{order.id}}</b> от <b>{{order.orderDate.substring(0,10)}}</b><br>
-        Для пользователя <b>{{order.user.username}}</b> ({{order.user.fullName}})
-    </div>
-    <div class="delivery-info">
-        Прибудет <b>{{order.deliveryDate.substring(0,10)}}</b><br>
-        На ПВЗ по адресу <b>{{order.address.fullAddress}}</b>
-    </div>
-    <div class="product-list">
-        @for (orderProduct of order.orderProducts.sort(); track orderProduct) {
-            <div class="product-info">
-                {{orderProduct.product.article}}
+<div class="order-card">
+    <div class="card-header">
+        <div class="order-info">
+            <span class="order-number">Заказ <b>#{{order.id}}</b></span> 
+            <span class="order-date"> от <b>{{order.orderDate.substring(0,10)}}</b></span>
+            <div class="user-details">
+                Для <b>{{order.user.username}}</b> <span class="full-name"> ({{order.user.fullName}})</span>
             </div>
-        }
+        </div>
+        <div class="status-info" [class.status-pending]="order.status.id != 2">
+            <span class="status-label">Статус: <b>{{order.status.name}}</b></span>
+            <br>
+            @if(order.status.id != 2) {
+                <div class="receive-code">Код: <b>{{order.receiveCode}}</b></div>
+            }
+        </div>
     </div>
-    <div class="status-info">
-        Статус: <b>{{order.status.name}}</b><br>
-        @if(order.status.id != 2) {
-            Код для получения: <b>{{order.receiveCode}}</b>
+
+    <div class="delivery-section">
+        <div class="delivery-info">
+            Прибудет: <b>{{order.deliveryDate.substring(0,10)}}</b><br>
+            ПВЗ: <b>{{order.address.fullAddress}}</b>
+        </div>
+    </div>
+
+    <div class="product-list">
+        @for (orderProduct of order.orderProducts; track orderProduct) {
+            <div class="product-item" (click)="openProduct(orderProduct.product.article)">
+                <div class="product-main">
+                    <span class="article">#{{orderProduct.product.article}}</span>
+                    <div class="product-name">{{orderProduct.product.name}}</div>
+                    <div class="product-desc">{{orderProduct.product.description}}</div>
+                </div>
+                <div class="product-price">
+                    @if(orderProduct.product.discount > 0) {
+                        <span class="old-price">{{orderProduct.product.price}} Р.</span>
+                        <span class="current-price discount">
+                            {{orderProduct.product.price - orderProduct.product.price * orderProduct.product.discount / 100}} Р.
+                        </span>
+                    } @else {
+                        <span class="current-price">{{orderProduct.product.price}} Р.</span>
+                    }
+                </div>
+            </div>
         }
     </div>
 </div>

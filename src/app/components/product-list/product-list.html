@@ -1,6 +1,6 @@
 <div class="list-container">
-    @for (product of productList$ | async; track product) {
-        <div>
+    @for (product of productList(); track product) {
+        <div #card [id]="product.article">
             <app-product-component [product]="product"></app-product-component>
         </div>
     }

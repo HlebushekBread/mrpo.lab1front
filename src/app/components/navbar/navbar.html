@@ -8,8 +8,8 @@
         @if(hasAuthority("VIEW_PRODUCTS")) {
           <button class="nav-button" routerLink="/products">Магазин</button>
         }
-        @if(hasAuthority("VIEW_ALL_ORDERS")) {
-          <button class="nav-button" routerLink="/orders/all">Заказы</button>
+        @if(hasAuthority("VIEW_USER_ORDERS") || hasAuthority("VIEW_ALL_ORDERS")) {
+          <button class="nav-button" routerLink="/orders">Заказы</button>
         }
       </div>
       <div class="nav-logout">

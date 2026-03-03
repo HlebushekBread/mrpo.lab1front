@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { OrderService } from '../../services/order-service';
 import { OrderComponent } from './order-component/order-component';
 import { ProductComponent } from "../product-list/product-component/product-component";
+import { toSignal } from '@angular/core/rxjs-interop';
+import { AuthService } from '../../services/auth-service';
 
 @Component({
   selector: 'app-order-list',
@@ -12,7 +14,8 @@ import { ProductComponent } from "../product-list/product-component/product-comp
 })
 export class OrderList {
   private orderService = inject(OrderService);
-  
-  orderList$ = this.orderService.getAll();
+  private authService = inject(AuthService);
+
+  orderList = toSignal(this.orderService.getAll(), {initialValue: []});
 
 }

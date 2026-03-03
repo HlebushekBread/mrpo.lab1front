@@ -43,6 +43,10 @@ $font-family: 'Times New Roman', Times, serif;
       opacity: 0.8;
     }
 
+    &:active {
+      transform: translateY(1px);
+    }
+
     img {
       height: 40px;
       width: auto;
@@ -71,6 +75,7 @@ $font-family: 'Times New Roman', Times, serif;
 
       &:hover {
         background-color: $accent-color;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       }
 
       &:active {
@@ -105,6 +110,7 @@ $font-family: 'Times New Roman', Times, serif;
 
       &:hover {
         background-color: $accent-color;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       }
 
       &:active {
