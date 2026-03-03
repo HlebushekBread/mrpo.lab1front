@@ -15,7 +15,22 @@ $font-family: 'Times New Roman', Times, serif;
     width: 100%; 
     height: fit-content;
     
-    .header {
+    div {
         font-size: 1.2rem;
+    }
+
+    .product-list {
+        .product-info {
+            width: 100%;
+            padding: 0.75rem;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            border: 1px solid $border-color;
+            border-radius: $border-radius / 2;
+            font-family: $font-family;
+            font-size: 1.2rem;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
     }
 }

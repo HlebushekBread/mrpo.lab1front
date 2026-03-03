@@ -1,5 +1,23 @@
 <div class="grid-container">
-    <div class="header">
-        Заказ <b>#{{order.id}}</b> для пользователя <b>{{order.user.username}}</b> ({{order.user.fullName}})
+    <div class="order-info">
+        Заказ <b>#{{order.id}}</b> от <b>{{order.orderDate.substring(0,10)}}</b><br>
+        Для пользователя <b>{{order.user.username}}</b> ({{order.user.fullName}})
+    </div>
+    <div class="delivery-info">
+        Прибудет <b>{{order.deliveryDate.substring(0,10)}}</b><br>
+        На ПВЗ по адресу <b>{{order.address.fullAddress}}</b>
+    </div>
+    <div class="product-list">
+        @for (orderProduct of order.orderProducts.sort(); track orderProduct) {
+            <div class="product-info">
+                {{orderProduct.product.article}}
+            </div>
+        }
+    </div>
+    <div class="status-info">
+        Статус: <b>{{order.status.name}}</b><br>
+        @if(order.status.id != 2) {
+            Код для получения: <b>{{order.receiveCode}}</b>
+        }
     </div>
 </div>
