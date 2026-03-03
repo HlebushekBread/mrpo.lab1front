@@ -1,9 +1,13 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { Order } from '../../../models/order.type';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-order-component',
-  imports: [],
+  imports: [CommonModule],
   templateUrl: './order-component.html',
   styleUrl: './order-component.scss',
 })
-export class OrderComponent {}
+export class OrderComponent {
+  @Input() order!: Order;
+}

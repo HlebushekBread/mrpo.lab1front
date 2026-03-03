@@ -1,9 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { OrderService } from '../../services/order-service';
+import { OrderComponent } from './order-component/order-component';
+import { ProductComponent } from "../product-list/product-component/product-component";
 
 @Component({
   selector: 'app-order-list',
-  imports: [],
+  imports: [OrderComponent, CommonModule, ProductComponent],
   templateUrl: './order-list.html',
   styleUrl: './order-list.scss',
 })
-export class OrderList {}
+export class OrderList {
+  private orderService = inject(OrderService);
+  
+  orderList$ = this.orderService.getAll();
+
+}

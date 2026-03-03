@@ -16,7 +16,7 @@ export const routes: Routes = [
         component: ProductList
     },
     {
-        path: "orders",
+        path: "orders/all",
         pathMatch: "full",
         component: OrderList
     },

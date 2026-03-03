@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ProductService } from "../../services/product-service";
 import { CommonModule } from '@angular/common';
 import { ProductComponent } from './product-component/product-component';

@@ -1,1 +1,7 @@
-<p>order-list works!</p>
+<div class="list-container">
+    @for (order of orderList$ | async; track order) {
+        <div>
+            <app-order-component [order]="order"></app-order-component>
+        </div>
+    }
+</div>

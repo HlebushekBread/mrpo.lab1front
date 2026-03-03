@@ -1,7 +1,7 @@
 <div class="list-container">
     @for (product of productList$ | async; track product) {
         <div>
-            <app-product [product]="product"></app-product>
+            <app-product-component [product]="product"></app-product-component>
         </div>
     }
 </div>

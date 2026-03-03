@@ -1,18 +1,25 @@
-<div class="grid-container">
+<div [ngClass]="{'grid-container': true, 'highlighted': product.discount>15}">
     <div class="img-container">
         <img />
     </div>
     <div class="info-container">
-        <p><b>{{product.category}} | {{product.name}}</b></p>
+        <b>{{product.category.name}} | {{product.name}}</b>
         <p>
             <br>{{product.description}}
-            <br>{{product.manufacturer}}
-            <br>{{product.provider}}
-            <br>{{product.price}}
-            <br>{{product.amount}} {{product.unit}}
+            <br>
+            <br>Производитель: {{product.manufacturer.name}}
+            <br>Поставщик: {{product.provider.name}}
+            <br>
+            <br>Цена:
+            @if(product.discount > 0) {
+                <s>{{product.price}} Р.</s> {{product.price - product.price * product.discount / 100}} Р.
+            } @else {
+                {{product.price}} Р.
+            }
+            <br>Осталось {{product.amount}} {{product.unit.name}}
         </p>
     </div>
     <div class="discount-container">
-        <p>{{product.discount}}%</p>
+        <p>{{product.discount}}%<br>Скидка</p>
     </div>
 </div>

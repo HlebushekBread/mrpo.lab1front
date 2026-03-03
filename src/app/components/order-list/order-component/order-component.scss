@@ -1,0 +1,21 @@
+$primary-color: #7fff00;
+$accent-color: #00fa9a;
+$text-color: #333;
+$border-color: #ddd;
+$bg-color: #fff;
+$border-radius: 15px;
+$font-family: 'Times New Roman', Times, serif;
+
+.grid-container {
+    background: #fff;
+    padding: /*1rem 2rem 2rem*/ 2rem;
+    margin-top: 2rem;
+    border-radius: $border-radius;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    width: 100%; 
+    height: fit-content;
+    
+    .header {
+        font-size: 1.2rem;
+    }
+}
