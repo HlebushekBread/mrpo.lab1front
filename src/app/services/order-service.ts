@@ -11,4 +11,8 @@ export class OrderService {
   getAll(): Observable<any> {
     return this.http.get<any[]>('http://localhost:8080/api/orders/all');
   }
+
+  getByUserId() {
+    return this.http.get<any[]>('http://localhost:8080/api/orders/get');
+  }
 }

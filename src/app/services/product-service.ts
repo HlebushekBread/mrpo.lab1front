@@ -9,6 +9,10 @@ export class ProductService{
   private http = inject(HttpClient);
 
   getAll(): Observable<any> {
-    return this.http.get<any[]>('http://localhost:8080/api/products/all');
+    return this.http.get<any[]>(`http://localhost:8080/api/products/all`);
+  }
+
+  getByArticle(article: string): Observable<any> {
+    return this.http.get<any>(`http://localhost:8080/api/products/${article}`)
   }
 }

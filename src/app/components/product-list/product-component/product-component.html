@@ -1,33 +1,36 @@
-<div>
-    <div [ngClass]="{'product-card': true, 'highlighted': navigationState.article == product.article}">
+<div class="wrapper-container">
+    @if(isProductEdit()) {
+        <img class="edit-button" src="icons/edit.png" (click)="editProduct(product().article)">
+    }
+    <div [ngClass]="{'product-card': true, 'highlighted': navigationState.article == product().article}">
         <div class="img-container">
-            <img />
+            <img [src]="imageUrl().url" (error)="$event.target.src = 'placeholder.png'">
         </div>
         <div class="info-container">
             <div class="info-header">
-                #{{product.article}}
-                <br><b>{{product.category.name}} | {{product.name}}</b>
+                #{{product().article}}
+                <br><b>{{product().category.name}} | {{product().name}}</b>
             </div>
-            <br>{{product.description}}
+            <br>{{product().description}}
             <br>
             <span class="secondary-info">
-                <br>Производитель: {{product.manufacturer.name}}
-                <br>Поставщик: {{product.provider.name}}
+                <br>Производитель: {{product().manufacturer.name}}
+                <br>Поставщик: {{product().provider.name}}
             </span>
             <br>
             <br>Цена:
-            @if(product.discount > 0) {
-                <span class="old-price">{{product.price}} Р.</span> <span> {{product.price - product.price * product.discount / 100}} Р.</span> 
+            @if(product().discount > 0) {
+                <span class="old-price">{{product().price}} Р.</span> <span> {{product().price - product().price * product().discount / 100}} Р.</span> 
             } @else {
-                {{product.price}} Р.
+                {{product().price}} Р.
             }
             <br>
             <span class="secondary-info">
-                Осталось {{product.amount}} {{product.unit.name}}
+                Осталось {{product().amount}} {{product().unit.name}}
             </span>
         </div>
-        <div [ngClass]="{'discount-container': true, 'highlighted': product.discount>15}">
-            <p>{{product.discount}}%<br>Скидка</p>
+        <div [ngClass]="{'discount-container': true, 'highlighted': product().discount>15}">
+            <p>{{product().discount}}%<br>Скидка</p>
         </div>
     </div>
 </div>

@@ -1,0 +1,44 @@
+<div class="wrapper-container">
+    @if(product()) {
+        <div>
+            <div>
+                <img [src]="imageUrl()">
+            </div>
+
+            <div>
+                <div>
+                    Артикул: <input type="text" readonly [value]="product().article">
+                    <br>
+                    Категория: <input type="text" [value]="product().category.name">
+                    Название: <input type="text" [value]="product().name">
+                </div>
+
+                <br>
+                Описание: 
+                <textarea [value]="product().description"></textarea>
+
+                <br>
+                <span>
+                    Производитель: <input type="text" [value]="product().manufacturer.name">
+                    Поставщик: <input type="text" [value]="product().provider.name">
+                </span>
+
+                <br><br>
+                Цена: <input type="number" [value]="product().price"> Р.
+                Скидка: <input type="number" [value]="product().discount"> %
+
+                <br>
+                <span>
+                    Остаток: <input type="number" [value]="product().amount">
+                    Ед. измерения: <input type="text" [value]="product().unit.name">
+                </span>
+                
+                <br><br>
+                <div class="actions">
+                    <button type="button">Подтвердить</button>
+                    <button type="button">Удалить</button>
+                </div>
+            </div>
+        </div>
+    }
+</div>

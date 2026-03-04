@@ -3,7 +3,6 @@ import { ProductService } from "../../services/product-service";
 import { CommonModule } from '@angular/common';
 import { ProductComponent } from './product-component/product-component';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { AuthService } from '../../services/auth-service';
 
 @Component({
   selector: 'app-product-list',

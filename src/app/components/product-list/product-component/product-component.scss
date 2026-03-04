@@ -6,78 +6,109 @@ $bg-color: #fff;
 $border-radius: 15px;
 $font-family: 'Times New Roman', Times, serif;
 
-img {
-    width: 100%;
-    aspect-ratio: 1 / 1;
-}
-.product-card {
-    display: grid;
-    grid-template-columns: 2fr 10fr 2fr;
-    background: #fff;
-    padding: 2rem;
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-    border-radius: $border-radius;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    width: 100%; 
-    height: fit-content;
-    //border-left: 8px solid $primary-color;
+.wrapper-container{
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
-    &.highlighted {
-        box-shadow: 0 4px 15px rgba(#7fff00, 1);
-    }
+    .edit-button {
+        height: fit-content;
+        max-height: 3rem;
+        aspect-ratio: 1/1;
+        padding: 10px;
+        margin-right: 2rem;
+        background-color: $primary-color;
+        border: none;
+        border-radius: $border-radius / 2;
 
-    .old-price {
-        color: #999;
-        font-size: 1.2rem;
-        text-decoration: line-through;
-    }
-
-    span {
-        color: #e74c3c;
-        font-size: 1.3rem;
-    }
-
-    .img-container {
-        width: 100%;
-        max-height: 300px;
-        aspect-ratio: 1 / 1;
-    }
-    
-    .info-container{
-        font-size: 1.2rem;
-        margin-left: 25px;
-
-        .info-header{
-            border-bottom: 2px solid $border-color;
-            padding-bottom: 10px;
+        &:hover {
+            background-color: $accent-color;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-        
-        .secondary-info {
-            color: $text-color;
-            font-size: 1.2rem;
-            font-style: italic;
+
+        &:active {
+            transform: translateY(1px);
+        }
+
+        img {
+            width: 100%;
+            aspect-ratio: 1 / 1;
         }
     }
-
-    .discount-container{
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        max-height: 300px;
+    .product-card {
+        display: grid;
+        grid-template-columns: 2fr 10fr 2fr;
+        background: #fff;
+        padding: 2rem;
+        margin-top: 2rem;
+        margin-bottom: 2rem;
         border-radius: $border-radius;
-        border: solid $border-color 2px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        width: 70%; 
+        height: fit-content;
+        //border-left: 8px solid $primary-color;
 
         &.highlighted {
-            color: white;
-            background-color: #2E8B57;
+            box-shadow: 0 4px 15px rgba(#7fff00, 1);
+        }
+
+        .old-price {
+            color: #999;
+            font-size: 1.2rem;
+            text-decoration: line-through;
+        }
+
+        span {
+            color: #e74c3c;
+            font-size: 1.3rem;
+        }
+
+        .img-container {
+            width: 100%;
+            max-height: 300px;
+            aspect-ratio: 1 / 1;
+
+            img {
+                width: 100%;
+                aspect-ratio: 1 / 1;
+            }
         }
         
-        p {
-            margin-left: 10px;
-            margin-right: 10px;
-            text-align: center;
-            font-size: 2rem;
+        .info-container{
+            font-size: 1.2rem;
+            margin-left: 25px;
+
+            .info-header{
+                border-bottom: 2px solid $border-color;
+                padding-bottom: 10px;
+            }
+            
+            .secondary-info {
+                color: $text-color;
+                font-size: 1.2rem;
+                font-style: italic;
+            }
+        }
+
+        .discount-container{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            max-height: 300px;
+            border-radius: $border-radius;
+            border: solid $border-color 2px;
+
+            &.highlighted {
+                color: white;
+                background-color: #2E8B57;
+            }
+            
+            p {
+                margin-left: 10px;
+                margin-right: 10px;
+                text-align: center;
+                font-size: 2rem;
+            }
         }
     }
 }

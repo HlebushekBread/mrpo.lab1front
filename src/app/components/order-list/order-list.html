@@ -1,4 +1,10 @@
 <div class="list-container">
+    @if (isAllOrdersView) {
+        <div class="info-container">
+            Вы просматриваете заказы всех пользователей как менеджер.<br>
+            Чтобы посмотреть свои заказы зайдите в учетную записть пользователя.
+        </div>
+    }
     @for (order of orderList(); track order) {
         <div>
             <app-order-component [order]="order"></app-order-component>

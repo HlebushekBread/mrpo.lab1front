@@ -1,7 +1,8 @@
-import { Component, inject, Input } from '@angular/core';
+import { Component, inject, input, Input } from '@angular/core';
 import { Order } from '../../../models/order.type';
 import { CommonModule } from '@angular/common';
 import { NavigationExtras, Router } from '@angular/router';
+import { AuthService } from '../../../services/auth-service';
 
 @Component({
   selector: 'app-order-component',
@@ -12,7 +13,7 @@ import { NavigationExtras, Router } from '@angular/router';
 export class OrderComponent {
   private router = inject(Router)
 
-  @Input() order!: Order;
+  order = input.required<Order>();
 
   openProduct(article: string) {
     const navigationExtras: NavigationExtras = {
