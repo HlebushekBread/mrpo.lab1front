@@ -1,5 +1,5 @@
 <div class="wrapper-container">
-    @if(isProductEdit()) {
+    @if(isEditProducts()) {
         <img class="edit-button" src="icons/edit.png" (click)="editProduct(product().article)">
     }
     <div [ngClass]="{'product-card': true, 'highlighted': navigationState.article == product().article}">

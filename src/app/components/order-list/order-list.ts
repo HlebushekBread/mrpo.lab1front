@@ -16,8 +16,8 @@ export class OrderList {
   private orderService = inject(OrderService);
   private authService = inject(AuthService);
 
-  isAllOrdersView = this.authService.getTokenAuthorities().includes("VIEW_ALL_ORDERS");
+  isViewAllOrders = this.authService.getTokenAuthorities().includes("VIEW_ALL_ORDERS");
   
-  orderList = toSignal(this.isAllOrdersView ? this.orderService.getAll() : this.orderService.getByUserId(), {initialValue: []});
+  orderList = toSignal(this.isViewAllOrders ? this.orderService.getAll() : this.orderService.getByUserId(), {initialValue: []});
   
 }

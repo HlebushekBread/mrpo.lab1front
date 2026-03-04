@@ -1,5 +1,5 @@
-import { Component, inject, input, Input } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, inject, input, Input, signal } from '@angular/core';
+import { NavigationExtras, Router } from '@angular/router';
 import { ImageService } from '../../services/image-service';
 import { AuthService } from '../../services/auth-service';
 import { catchError, map, Observable, of, switchMap } from 'rxjs';
@@ -7,19 +7,33 @@ import { Product } from '../../models/product.type';
 import { ProductService } from '../../services/product-service';
 import { CommonModule } from '@angular/common';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { UnitService } from '../../services/unit-service';
+import { CategoryService } from '../../services/category-service';
+import { ManufacturerService } from '../../services/manufacturer-service';
+import { ProviderService } from '../../services/provider-service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-product-edit-component',
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './product-edit-component.html',
   styleUrl: './product-edit-component.scss',
 })
 export class ProductEditComponent {
   private router = inject(Router)
+  private unitService = inject(UnitService);
+  private categoryService = inject(CategoryService);
+  private manufacturerService = inject(ManufacturerService);
+  private providerService = inject(ProviderService);
   private imageService = inject(ImageService);
   private productService = inject(ProductService);
 
   article = input.required<string>();
+
+  units = toSignal(this.unitService.getAll(), { initialValue: [] });
+  categories = toSignal(this.categoryService.getAll(), { initialValue: [] });
+  manufacturers = toSignal(this.manufacturerService.getAll(), { initialValue: [] });
+  providers = toSignal(this.providerService.getAll(), { initialValue: [] });
 
   private product$ = toObservable(this.article).pipe(
     switchMap(art => this.productService.getByArticle(art))
@@ -29,16 +43,71 @@ export class ProductEditComponent {
 
   imageUrl = toSignal(
     this.product$.pipe(
-      switchMap(p => {
-        if (p?.image) {
-          return this.imageService.getImageLink(p.image).pipe(
-            catchError(() => of({ url: 'placeholder.png' }))
-          );
-        }
-        return of({ url: 'placeholder.png' });
-      }),
-      map(res => res.url)
+      switchMap(p => this.imageService.getImageLink(p?.image))
     ),
-    { initialValue: 'placeholder.png' }
+    { initialValue: { url: 'placeholder.png' } }
   );
+
+  previewUrl = signal<string | null>(null);
+  selectedFile: File | null = null;
+
+  reloadPage() {
+    window.location.reload();
+  }
+
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files?.[0];
+    
+    if (file) {
+      const extension = file.name.split('.').pop();
+      const name = `${this.product().article}.${extension}`;
+
+      this.selectedFile = new File([file], name, { type: file.type });
+
+      if (this.previewUrl()) {
+          URL.revokeObjectURL(this.previewUrl()!);
+      }
+      this.previewUrl.set(URL.createObjectURL(this.selectedFile));
+      console.log('Файл загружен:', this.selectedFile.name);
+    }
+  }
+
+  submitForm(formDataRaw: any) {
+    const data = new FormData();
+
+    const productDto = {
+      article: formDataRaw.article,
+      name: formDataRaw.name,
+      categoryId: Number(formDataRaw.categoryId),
+      description: formDataRaw.description,
+      manufacturerId: Number(formDataRaw.manufacturerId),
+      providerId: Number(formDataRaw.providerId),
+      price: Number(formDataRaw.price),
+      discount: Number(formDataRaw.discount),
+      amount: Number(formDataRaw.amount),
+      unitId: Number(formDataRaw.unitId),
+      image: this.selectedFile?.name
+    };
+
+    const jsonBlob = new Blob([JSON.stringify(productDto)], {
+      type: 'application/json'
+    });
+
+    data.append('product', jsonBlob);
+
+    if (this.selectedFile) {
+      data.append('image', this.selectedFile);
+    }
+
+    this.productService.updateProduct(productDto.article, data).subscribe({
+      next: () => {
+        const navigationExtras: NavigationExtras = {
+          state: {article: productDto.article }
+        };
+        this.router.navigate(["/products"], navigationExtras);
+      },
+      error: (err) => console.error('Ошибка Spring:', err)
+    });
+  }
 }
