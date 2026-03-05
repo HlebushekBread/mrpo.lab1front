@@ -1,11 +1,11 @@
 <div class="wrapper-container">
-    @if(product(); as product) {
+    @if(article()) {
         <div class="product-card">
             <div class="image-section">
                 @if(previewUrl()){
                     <img [src]="previewUrl()" class="product-image">
                 }@else {
-                    <img [src]="imageUrl().url" (error)="$event.target.src = 'placeholder.png'" class="product-image">
+                    <img src="placeholder.png" class="product-image">
                 }
                 <input type="file" #fileInput style="display: none" accept="image/*" (change)="onFileSelected($event)">
                 <button type="button" class="btn-upload" (click)="fileInput.click()">
@@ -17,33 +17,33 @@
                 <div class="form-grid">
                     <label class="form-field full-width">
                         <span class="label-text">Артикул</span>
-                        <input type="text" #articleInput readonly [value]="product.article" class="input-readonly">
+                        <input type="text" #articleInput readonly [value]="article()" class="input-readonly">
                     </label>
 
                     <label class="form-field">
                         <span class="label-text">Название</span>
-                        <input type="text" #nameInput [value]="product.name">
+                        <input type="text" #nameInput [value]="">
                     </label>
                     
                     <label class="form-field">
                         <span class="label-text">Категория</span>
                         <select #categoryInput>
                             @for (category of categories(); track category.id) {
-                                <option [selected]="category.id === product.category.id" [value]="category.id">{{ category.name }}</option>
+                                <option [value]="category.id">{{ category.name }}</option>
                             }
                         </select>
                     </label>
 
                     <label class="form-field full-width">
                         <span class="label-text">Описание</span>
-                        <textarea #descriptionInput rows="4">{{ product.description }}</textarea>
+                        <textarea #descriptionInput rows="4"></textarea>
                     </label>
 
                     <label class="form-field">
                         <span class="label-text">Производитель</span>
                         <select #manufacturerInput>
                             @for (manufacturer of manufacturers(); track manufacturer.id) {
-                                <option [selected]="manufacturer.id === product.manufacturer.id" [value]="manufacturer.id">{{ manufacturer.name }}</option>
+                                <option [value]="manufacturer.id">{{ manufacturer.name }}</option>
                             }
                         </select>
                     </label>
@@ -52,31 +52,31 @@
                         <span class="label-text">Поставщик</span>
                         <select #providerInput>
                             @for (provider of providers(); track provider.id) {
-                                <option [selected]="provider.id === product.provider.id" [value]="provider.id">{{ provider.name }}</option>
+                                <option [value]="provider.id">{{ provider.name }}</option>
                             }
                         </select>
                     </label>
 
                     <label class="form-field">
                         <span class="label-text">Цена (₽)</span>
-                        <input type="number" #priceInput [value]="product.price">
+                        <input type="number" #priceInput value=0>
                     </label>
 
                     <label class="form-field">
                         <span class="label-text">Скидка (%)</span>
-                        <input type="number" #discountInput [value]="product.discount">
+                        <input type="number" #discountInput value=0>
                     </label>
 
                     <label class="form-field">
                         <span class="label-text">Остаток</span>
-                        <input type="number" #amountInput [value]="product.amount">
+                        <input type="number" #amountInput value=0>
                     </label>
 
                     <label class="form-field">
                         <span class="label-text">Ед. измерения</span>
                         <select #unitInput>
                             @for (unit of units(); track unit.id) {
-                                <option [selected]="unit.id === product.unit.id" [value]="unit.id">{{ unit.name }}</option>
+                                <option [value]="unit.id">{{ unit.name }}</option>
                             }
                         </select>
                     </label>
@@ -96,13 +96,12 @@
                         amount: amountInput.value,
                         unitId: unitInput.value
                     })">Подтвердить</button>
-                    <button type="button" class="btn-danger" (click)="deleteProduct()">Удалить</button>
                 </div>
             </form>
         </div>
     } @else {
         <div class="error-container">
-            Товара с таким артикулем не существует.<br>
+            Нельзя напрямую создать товар без указания артикуля.<br>
             Вы можете создать его в меню магазина.
         </div>
     }

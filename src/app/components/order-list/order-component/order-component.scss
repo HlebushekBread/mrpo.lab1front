@@ -10,13 +10,13 @@ $font-family: 'Times New Roman', Times, serif;
 .order-card {
     background: $bg-color;
     padding: 2rem;
-    margin: 2rem auto;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
     border-radius: $border-radius;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
     max-width: 800px;
     font-family: $font-family;
     color: $text-color;
-    //border-left: 8px solid $primary-color;
 
     .card-header {
         display: flex;

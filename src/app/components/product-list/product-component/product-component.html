@@ -6,8 +6,8 @@
         <div class="img-container">
             <img [src]="imageUrl().url" (error)="$event.target.src = 'placeholder.png'">
         </div>
-        <div class="info-container">
-            <div class="info-header">
+        <div class="information-container">
+            <div class="information-header">
                 #{{product().article}}
                 <br><b>{{product().category.name}} | {{product().name}}</b>
             </div>

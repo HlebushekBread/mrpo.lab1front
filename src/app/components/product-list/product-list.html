@@ -1,4 +1,14 @@
 <div class="list-container">
+    @if(isEditProducts()) {
+        @if(errorMessage()) {
+            <div class="error-container">{{errorMessage()}}</div>
+        }
+        <div class="add-form-container">
+            Артикул:
+            <input #articleInput type="text" maxlength="6" pattern="[A-Z0-9]">
+            <button (click)="createProduct(articleInput.value)">Создать</button>
+        </div>
+    }
     @for (product of productList(); track product) {
         <div #card [id]="product.article">
             <app-product-component [product]="product"></app-product-component>

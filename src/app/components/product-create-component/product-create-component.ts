@@ -2,7 +2,7 @@ import { Component, inject, input, Input, signal } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { ImageService } from '../../services/image-service';
 import { AuthService } from '../../services/auth-service';
-import { catchError, map, Observable, of, switchMap } from 'rxjs';
+import { catchError, map, Observable, of, switchMap, take } from 'rxjs';
 import { Product } from '../../models/product.type';
 import { ProductService } from '../../services/product-service';
 import { CommonModule } from '@angular/common';
@@ -14,12 +14,12 @@ import { ProviderService } from '../../services/provider-service';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-product-edit-component',
+  selector: 'app-product-create-component',
   imports: [CommonModule, FormsModule],
-  templateUrl: './product-edit-component.html',
-  styleUrl: './product-edit-component.scss',
+  templateUrl: './product-create-component.html',
+  styleUrl: './product-create-component.scss',
 })
-export class ProductEditComponent {
+export class ProductCreateComponent {
   private router = inject(Router)
   private unitService = inject(UnitService);
   private categoryService = inject(CategoryService);
@@ -28,25 +28,38 @@ export class ProductEditComponent {
   private imageService = inject(ImageService);
   private productService = inject(ProductService);
 
-  article = input.required<string>();
+  article = signal(history.state.article || '');
+
+  constructor() {
+    if (!this.article()) {
+      this.generateArticle();
+    }
+  }
+
+  generateArticle(length: number = 6) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    this.productService.getAllArticles().pipe(take(1)).subscribe({
+      next: (articles: string[]) => {
+        let result;
+        do {
+          result = '';
+          
+          for (let i = 0; i < length; i++) {
+            const randomIndex = Math.floor(Math.random() * characters.length);
+            result += characters[randomIndex];
+          }
+        } while(articles.includes(result));
+        
+        this.article.set(result);
+      },
+      error: (err) => console.error(err)
+    });
+  }
 
   units = toSignal(this.unitService.getAll(), { initialValue: [] });
   categories = toSignal(this.categoryService.getAll(), { initialValue: [] });
   manufacturers = toSignal(this.manufacturerService.getAll(), { initialValue: [] });
   providers = toSignal(this.providerService.getAll(), { initialValue: [] });
-
-  private product$ = toObservable(this.article).pipe(
-    switchMap(art => this.productService.getByArticle(art))
-  );
-
-  product = toSignal(this.product$);
-
-  imageUrl = toSignal(
-    this.product$.pipe(
-      switchMap(p => this.imageService.getImageLink(p?.image))
-    ),
-    { initialValue: { url: 'placeholder.png' } }
-  );
 
   previewUrl = signal<string | null>(null);
   selectedFile: File | null = null;
@@ -61,7 +74,7 @@ export class ProductEditComponent {
     
     if (file) {
       const extension = file.name.split('.').pop();
-      const name = `${this.product().article}.${extension}`;
+      const name = `${this.article}.${extension}`;
 
       this.selectedFile = new File([file], name, { type: file.type });
 
@@ -100,7 +113,7 @@ export class ProductEditComponent {
       data.append('image', this.selectedFile);
     }
 
-    this.productService.updateProduct(productDto.article, data).subscribe({
+    this.productService.createProduct(data).subscribe({
       next: () => {
         const navigationExtras: NavigationExtras = {
           state: {article: productDto.article }
@@ -109,14 +122,5 @@ export class ProductEditComponent {
       },
       error: (err) => console.error('Ошибка Spring:', err)
     });
-  }
-
-  deleteProduct() {
-    this.productService.deleteProduct(this.article()).subscribe({
-      next: () => {
-        this.router.navigate(["/products"]);
-      },
-      error: (err) => console.error('Ошибка Spring:', err)
-    });;
   }
 }

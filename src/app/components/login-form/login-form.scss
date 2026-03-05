@@ -16,18 +16,6 @@ $font-family: 'Times New Roman', Times, serif;
   background-color: $bg-color;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
-  .error-container {
-    width: fit-content;
-    padding: 10px;
-    margin: 20px;
-    background-color: #FEF2F2;
-    border: 2px solid #FCA5A5 ;
-    border-radius: $border-radius / 2;
-    box-shadow: 0 4px 15px rgba(#7F1D1D, 0.2);
-    border-width: 2px;
-    color: #7F1D1D;
-  }
-
   .main-form {
     background: #fff;
     padding: 2rem;
