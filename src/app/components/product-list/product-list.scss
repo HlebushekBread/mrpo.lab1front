@@ -7,69 +7,142 @@ $bg-color: #fff;
 $border-radius: 15px;
 $font-family: 'Times New Roman', Times, serif;
 
-.add-form-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: #fff;
-    padding: 1rem;
-    margin-top: 2rem;
-    border-radius: $border-radius;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 400px;
-    height: 40px;
+.filters-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 800px; // Ограничим ширину для красоты
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem;
+  background: $bg-color;
+  border-radius: $border-radius;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: $font-family;
 
-    input[type="text"] {
+  // Общие стили для всех полей ввода
+  input[type="text"], select {
+    padding: 0.6rem 1rem;
+    border: 1px solid $border-color;
+    border-radius: $border-radius / 2;
+    font-family: $font-family;
+    font-size: 1rem;
+    color: $text-color;
+    outline: none;
+    transition: border-color 0.3s ease;
+
+    &:focus {
+      border-color: $accent-color;
+    }
+  }
+
+  .search-box {
+    input {
       width: 100%;
-      padding: 0.75rem;
-      margin: 1rem;
-      border: 1px solid $border-color;
-      border-radius: $border-radius / 2;
-      font-family: $font-family;
-      font-size: 1.2rem;
       box-sizing: border-box;
-      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+  }
 
-      &:focus {
-          outline: none;
-          border-color: $accent-color;
-          box-shadow: 0 0 0 3px rgba($accent-color, 0.2);
-      }
+  .select-group, .sort-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+  }
+
+  .select-group select {
+    flex: 1;
+    min-width: 150px;
+  }
+
+  .direction-button {
+    padding: 0.6rem 1rem;
+    background-color: $bg-color;
+    border: 1px solid $border-color;
+    border-radius: $border-radius / 2;
+    color: $text-color;
+    font-family: $font-family;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+
+    &:hover {
+      background-color: $accent-color;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
-    button {
-      width: fit-content;
-      padding: 0.75rem;
-      background-color: $primary-color;
-      color: $text-color;
-      border: none;
-      border-radius: $border-radius / 2;
-      font-family: $font-family;
-      font-size: 1.2rem;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-
-      &:hover {
-        background-color: $accent-color;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      }
-
-      &:active {
-        transform: translateY(1px);
-      }
+    &:active {
+      transform: translateY(1px);
     }
+  }
+
+  .stock-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    font-weight: bold;
+    color: $secondary-text;
+
+    input {
+      width: 18px;
+      height: 18px;
+      accent-color: $primary-color;
+    }
+  }
 }
+
+.add-form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #fff;
+  padding: 1rem;
+  border-radius: $border-radius;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  height: 40px;
+
+  button {
+    width: fit-content;
+    padding: 0.75rem;
+    background-color: $primary-color;
+    color: $text-color;
+    border: none;
+    border-radius: $border-radius / 2;
+    font-family: $font-family;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: $accent-color;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    &:active {
+      transform: translateY(1px);
+    }
+  }
+}
+
+.empty-list {
+  padding: 3rem;
+  color: $secondary-text;
+  font-style: italic;
+  font-size: 1.5rem;
+}
+
 
 .list-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    left: 50%;
-    transform: translate(-50%);
-    font-size: 1.2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  font-size: 1.2rem;
 }
-

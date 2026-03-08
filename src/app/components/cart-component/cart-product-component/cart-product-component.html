@@ -1,0 +1,38 @@
+@if (product()) {
+    <div class="product-item">
+        <!-- Добавлен клик для перехода к товару -->
+        <div class="product-main">
+            <img class="product-image" 
+                 [src]="imageUrl().url" 
+                 (error)="$any($event).target.src = 'placeholder.png'"
+                 [alt]="product().name"
+                (click)="openProduct()">
+            <div>
+                <span class="product-article">#{{product().article}}</span>
+                <div class="product-name">{{product().name}}</div>
+                <div class="product-desc">{{product().description}}</div>
+            </div>
+        </div>
+
+        <div class="cart-controls">
+            <div class="counter-container">
+                <button (click)="decrementCount()">−</button>
+                <span class="count-value">{{ currentCount() }}</span>
+                <button (click)="incrementCount()">+</button>
+            </div>
+        </div>
+
+        <div class="product-price">
+            @if(product().discount > 0) {
+                <span class="old-price">{{(product().price * amount()) | number:'1.2-2'}} ₽</span>
+                <span class="current-price discount">
+                    {{(product().price * (1 - product().discount / 100) * amount()) | number:'1.2-2'}} ₽
+                </span>
+            } @else {
+                <span class="current-price">{{(product().price * amount()) | number:'1.2-2'}} ₽</span>
+            }
+        </div>
+    </div>
+} @else {
+    <div class="error-container">Ошибка: товар не найден</div>
+}

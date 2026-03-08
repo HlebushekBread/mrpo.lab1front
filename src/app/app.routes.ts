@@ -4,13 +4,19 @@ import { LoginForm } from './components/login-form/login-form';
 import { LogoutForm } from './components/logout-form/logout-form';
 import { OrderList } from './components/order-list/order-list';
 import { ProductEditComponent } from './components/product-edit-component/product-edit-component';
-import { ProductCreateComponent } from './components/product-create-component/product-create-component';
+import { OrderEditComponent } from './components/order-edit-component/order-edit-component';
+import { CartComponent } from './components/cart-component/cart-component';
 
 export const routes: Routes = [
     {
         path: "",
         pathMatch: "full",
         component: LoginForm
+    },
+    {
+        path: "cart",
+        pathMatch: "full",
+        component: CartComponent
     },
     {
         path: "products",
@@ -23,14 +29,14 @@ export const routes: Routes = [
         component: ProductEditComponent
     },
     {
-        path: "products/create",
-        pathMatch: "full",
-        component: ProductCreateComponent
-    },
-    {
         path: "orders",
         pathMatch: "full",
         component: OrderList
+    },
+    {
+        path: "orders/edit/:id",
+        pathMatch: "full",
+        component: OrderEditComponent
     },
     {
         path: "logout",

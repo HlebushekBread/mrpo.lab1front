@@ -5,8 +5,13 @@
             Чтобы посмотреть свои заказы зайдите в учетную записть пользователя.
         </div>
     }
+    @if(isEditOrders()) {
+        <div class="add-form-container">
+            <button (click)="createOrder()">Создать заказ</button>
+        </div>
+    }
     @for (order of orderList(); track order) {
-        <div>
+        <div class="order-container" #order [id]="order.id">
             <app-order-component [order]="order"></app-order-component>
         </div>
     }

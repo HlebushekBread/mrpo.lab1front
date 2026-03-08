@@ -8,18 +8,12 @@ import { Router } from '@angular/router';
   templateUrl: './logout-form.html',
   styleUrl: './logout-form.scss',
 })
-export class LogoutForm implements OnInit{
+export class LogoutForm{
   private authService = inject(AuthService);
   private router = inject(Router);
 
   role = signal(this.authService.getTokenRole());
   fullName = signal(this.authService.getTokenFullName());
-
-  ngOnInit(): void {
-    if(!this.authService.isAuthenticated()) {
-      this.router.navigate(['/'])
-    }
-  }
 
   logout() {
     this.authService.logout();

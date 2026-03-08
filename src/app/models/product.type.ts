@@ -9,5 +9,4 @@ export type Product = {
   discount: number,
   amount: number,
   description: string,
-  image: string,
 }

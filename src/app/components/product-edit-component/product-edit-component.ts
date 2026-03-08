@@ -1,4 +1,4 @@
-import { Component, inject, input, Input, signal } from '@angular/core';
+import { Component, inject, input, Input, OnInit, signal } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { ImageService } from '../../services/image-service';
 import { AuthService } from '../../services/auth-service';
@@ -19,7 +19,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './product-edit-component.html',
   styleUrl: './product-edit-component.scss',
 })
-export class ProductEditComponent {
+export class ProductEditComponent implements OnInit{
   private router = inject(Router)
   private unitService = inject(UnitService);
   private categoryService = inject(CategoryService);
@@ -29,6 +29,35 @@ export class ProductEditComponent {
   private productService = inject(ProductService);
 
   article = input.required<string>();
+  article$ = toObservable(this.article);
+  errorMessage = signal("");
+
+  product = signal<Product | null>(null);
+
+  defaultProduct = {
+    name: "",
+    unit: { id: 1, name: "" },
+    price: 0,
+    provider: { id: 1, name: "" },
+    manufacturer: { id: 1, name: "" },
+    category: { id: 1, name: "" },
+    discount: 0,
+    amount: 0,
+    description: ""
+  }
+
+  ngOnInit(): void {
+    if(this.article() === "new"){
+      this.product.set({
+        article: "000000",
+        ...this.defaultProduct
+      });
+    } else {
+      this.article$.pipe(
+        switchMap(article => this.productService.getByArticle(article)),
+      ).subscribe(product => this.product.set(product));
+    }
+  }
 
   units = toSignal(this.unitService.getAll(), { initialValue: [] });
   categories = toSignal(this.categoryService.getAll(), { initialValue: [] });
@@ -39,11 +68,9 @@ export class ProductEditComponent {
     switchMap(art => this.productService.getByArticle(art))
   );
 
-  product = toSignal(this.product$);
-
   imageUrl = toSignal(
     this.product$.pipe(
-      switchMap(p => this.imageService.getImageLink(p?.image))
+      switchMap(p => this.imageService.getImageLink(p?.article))
     ),
     { initialValue: { url: 'placeholder.png' } }
   );
@@ -51,7 +78,7 @@ export class ProductEditComponent {
   previewUrl = signal<string | null>(null);
   selectedFile: File | null = null;
 
-  returnToShop() {
+  revertChanges() {
     this.router.navigate(["/products"])
   }
 
@@ -59,9 +86,9 @@ export class ProductEditComponent {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
     
-    if (file) {
-      const extension = file.name.split('.').pop();
-      const name = `${this.product().article}.${extension}`;
+    if (file && file.type.startsWith('image/')) {
+      this.errorMessage.set("")
+      const name = `${this.product() ? this.product()?.article : "undefined"}`;
 
       this.selectedFile = new File([file], name, { type: file.type });
 
@@ -70,6 +97,8 @@ export class ProductEditComponent {
       }
       this.previewUrl.set(URL.createObjectURL(this.selectedFile));
       console.log('Файл загружен:', this.selectedFile.name);
+    } else {
+      this.errorMessage.set("Пожалуйста, выберите корректное изображение")
     }
   }
 
@@ -86,8 +115,7 @@ export class ProductEditComponent {
       price: Number(formDataRaw.price),
       discount: Number(formDataRaw.discount),
       amount: Number(formDataRaw.amount),
-      unitId: Number(formDataRaw.unitId),
-      image: this.selectedFile?.name
+      unitId: Number(formDataRaw.unitId)
     };
 
     const jsonBlob = new Blob([JSON.stringify(productDto)], {
@@ -100,10 +128,10 @@ export class ProductEditComponent {
       data.append('image', this.selectedFile);
     }
 
-    this.productService.updateProduct(productDto.article, data).subscribe({
-      next: () => {
+    this.productService.saveProduct(data).subscribe({
+      next: (response) => {
         const navigationExtras: NavigationExtras = {
-          state: {article: productDto.article }
+          state: {article: response.article }
         };
         this.router.navigate(["/products"], navigationExtras);
       },
@@ -117,6 +145,6 @@ export class ProductEditComponent {
         this.router.navigate(["/products"]);
       },
       error: (err) => console.error('Ошибка Spring:', err)
-    });;
+    });
   }
 }

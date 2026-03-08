@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth-service';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { switchMap } from 'rxjs/operators';
+import { CartService } from '../../../services/cart-service';
 
 @Component({
   selector: 'app-product-component',
@@ -19,8 +20,13 @@ export class ProductComponent {
   private router = inject(Router);
   private imageService = inject(ImageService);
   private authService = inject(AuthService);
+  private cartService = inject(CartService);
 
   product = input.required<Product>();
+
+  isMakeOrders = computed(() => 
+    this.authService.getTokenAuthorities().includes("MAKE_ORDERS")
+  );
 
   isEditProducts = computed(() => 
     this.authService.getTokenAuthorities().includes("EDIT_PRODUCTS")
@@ -28,7 +34,7 @@ export class ProductComponent {
 
   imageUrl = toSignal(
     toObservable(this.product).pipe(
-      switchMap(p => this.imageService.getImageLink(p?.image))
+      switchMap(p => this.imageService.getImageLink(p?.article))
     ),
     { initialValue: { url: 'placeholder.png' } }
   );
@@ -37,5 +43,25 @@ export class ProductComponent {
 
   editProduct(article: string) {
     this.router.navigate(["products/edit/", article]);
+  }
+
+  getProductCount(article: string): number {
+    return this.cartService.getCountByArticle(article);
+  }
+
+  addToCart(article: string) {
+    if(this.cartService.items().length<10) {
+      this.cartService.addToCart(article);
+    }
+  }
+
+  incrementCount(article: string) {
+    if(this.cartService.getCountByArticle(article)<20) {
+      this.cartService.updateCount(this.product().article, 1);
+    }
+  }
+
+  decrementCount(article: string) {
+    this.cartService.updateCount(article, -1);
   }
 }

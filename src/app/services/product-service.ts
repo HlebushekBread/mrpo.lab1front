@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ProductDto } from '../dtos/productDto.type';
 
 @Injectable({
   providedIn: 'root',
@@ -21,12 +20,8 @@ export class ProductService{
     return this.http.get<any>(`http://localhost:8080/api/products/${article}`)
   }
 
-  createProduct(data: FormData): Observable<any> {
-    return this.http.post<any>(`http://localhost:8080/api/products/create`, data)
-  }
-
-  updateProduct(article: string, data: FormData): Observable<any> {
-    return this.http.put<any>(`http://localhost:8080/api/products/update/${article}`, data);
+  saveProduct(data: FormData): Observable<any> {
+    return this.http.put<any>(`http://localhost:8080/api/products/save`, data)
   }
 
   deleteProduct(article: string): Observable<any> {

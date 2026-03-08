@@ -58,12 +58,12 @@ $font-family: 'Times New Roman', Times, serif;
     transition: background-color 0.3s ease;
 
     &:hover {
-    background-color: $accent-color;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      background-color: $accent-color;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
     &:active {
-    transform: translateY(1px);
+      transform: translateY(1px);
     }
   }
 }
@@ -110,11 +110,6 @@ $font-family: 'Times New Roman', Times, serif;
     box-shadow: 0 0 0 3px rgba($accent-color, 0.2);
     }
   }
-
-  .input-readonly {
-    background-color: #edf2f7;
-    cursor: not-allowed;
-  }
 }
 
 .actions {
@@ -134,7 +129,7 @@ $font-family: 'Times New Roman', Times, serif;
     font-size: 1.2rem;
     font-weight: bold;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.2s ease;
 
     &:hover {
     background-color: $accent-color;
@@ -142,7 +137,7 @@ $font-family: 'Times New Roman', Times, serif;
     }
 
     &:active {
-    transform: translateY(1px);
+      transform: translateY(1px);
     }
   }
 
@@ -153,10 +148,15 @@ $font-family: 'Times New Roman', Times, serif;
   .btn-danger {
     background-color: #e53e3e;
     color: white;
+    transition: all 0.2s ease;
 
     &:hover {
-        background-color: #7F1D1D;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      background-color: #7F1D1D;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    &:active {
+      transform: translateY(1px);
     }
   }
 }

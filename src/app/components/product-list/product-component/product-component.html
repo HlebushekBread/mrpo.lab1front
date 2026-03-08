@@ -8,27 +8,52 @@
         </div>
         <div class="information-container">
             <div class="information-header">
-                #{{product().article}}
-                <br><b>{{product().category.name}} | {{product().name}}</b>
+                <span class="article-tag">#{{product().article}}</span>
+                <h3 class="product-title">{{product().category.name}} | {{product().name}}</h3>
             </div>
-            <br>{{product().description}}
-            <br>
-            <span class="secondary-info">
-                <br>Производитель: {{product().manufacturer.name}}
-                <br>Поставщик: {{product().provider.name}}
-            </span>
-            <br>
-            <br>Цена:
-            @if(product().discount > 0) {
-                <span class="old-price">{{product().price}} Р.</span> <span> {{product().price - product().price * product().discount / 100}} Р.</span> 
-            } @else {
-                {{product().price}} Р.
-            }
-            <br>
-            <span class="secondary-info">
-                Осталось {{product().amount}} {{product().unit.name}}
-            </span>
+
+            <p class="description">{{product().description}}</p>
+
+            <div class="meta-info">
+                <div class="secondary-info">Производитель: <span>{{product().manufacturer.name}}</span></div>
+                <div class="secondary-info">Поставщик: <span>{{product().provider.name}}</span></div>
+            </div>
+
+            <div class="purchase-block">
+                <div class="price-section">
+                    <span class="label">Цена:</span>
+                    <div class="price-wrapper">
+                        @if(product().discount > 0) {
+                            <span class="old-price">{{product().price | number:'1.2-2'}} ₽</span>
+                            <span class="current-price highlighted">{{(product().price * (1 - product().discount / 100)) | number:'1.2-2'}} ₽</span>
+                        } @else {
+                            <span class="current-price">{{product().price | number:'1.2-2'}} ₽</span>
+                        }
+                    </div>
+                </div>
+
+                @if(isMakeOrders()) {
+                    <div class="cart-controls">
+                        @if (getProductCount(product().article) === 0) {
+                            <button class="add-to-cart-btn" (click)="addToCart(product().article)">
+                                В корзину
+                            </button>
+                        } @else {
+                            <div class="counter-container">
+                                <button (click)="decrementCount(product().article)">−</button>
+                                <span class="count-value">{{ getProductCount(product().article) }}</span>
+                                <button (click)="incrementCount(product().article)">+</button>
+                            </div>
+                        }
+                    </div>
+                }
+            </div>
+            
+            <div class="stock-info secondary-info">
+                Осталось: <strong>{{product().amount}} {{product().unit.name}}</strong>
+            </div>
         </div>
+        
         <div [ngClass]="{'discount-container': true, 'highlighted': product().discount>15}">
             <p>{{product().discount}}%<br>Скидка</p>
         </div>

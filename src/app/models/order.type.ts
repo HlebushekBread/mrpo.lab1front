@@ -15,7 +15,6 @@ export type Order = {
             category: { id: number, name: string },
             description: string,
             discount: number,
-            image: string,
             manufacturer: { id: number, name: string },
             name: string,
             price: number,

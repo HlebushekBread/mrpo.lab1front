@@ -11,14 +11,14 @@
                 <button type="button" class="btn-upload" (click)="fileInput.click()">
                     Загрузить изображение
                 </button>
+                @if(errorMessage()) {
+                    <div class="error-container">{{errorMessage()}}</div>
+                }
             </div>
 
             <form class="form-section">
                 <div class="form-grid">
-                    <label class="form-field full-width">
-                        <span class="label-text">Артикул</span>
-                        <input type="text" #articleInput readonly [value]="product.article" class="input-readonly">
-                    </label>
+                    <input type="hidden" #articleInput readonly [value]="product.article">
 
                     <label class="form-field">
                         <span class="label-text">Название</span>
@@ -83,7 +83,7 @@
                 </div>
 
                 <div class="actions">
-                    <button type="button" class="btn-primary" (click)="returnToShop()">Отменить</button>
+                    <button type="button" class="btn-primary" (click)="revertChanges()">Отменить</button>
                     <button type="button" class="btn-primary" (click)="submitForm({
                         article: articleInput.value,
                         name: nameInput.value,
@@ -96,7 +96,9 @@
                         amount: amountInput.value,
                         unitId: unitInput.value
                     })">Подтвердить</button>
-                    <button type="button" class="btn-danger" (click)="deleteProduct()">Удалить</button>
+                    @if(article()!="new") {
+                        <button type="button" class="btn-danger" (click)="deleteProduct()">Удалить</button>
+                    }
                 </div>
             </form>
         </div>

@@ -6,6 +6,8 @@ import { BehaviorSubject, tap } from 'rxjs';
   providedIn: 'root',
 })
 export class AuthService {
+  private readonly STORAGE_KEY = 'jwtToken';
+
   private http = inject(HttpClient);
 
   login(user:{username: string, password: string}){
@@ -17,15 +19,15 @@ export class AuthService {
   }
 
   private doLoginUser(token: any){
-    localStorage.setItem('jwtToken', token.token);
+    localStorage.setItem(this.STORAGE_KEY, token.token);
   }
 
   logout(){
-    localStorage.removeItem('jwtToken');
+    localStorage.removeItem(this.STORAGE_KEY);
   }
 
   getTokenPayload(){
-    const token = localStorage.getItem('jwtToken');
+    const token = localStorage.getItem(this.STORAGE_KEY);
     if (!token) { return null; }
 
     try {
@@ -89,7 +91,7 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean{
-    if(localStorage.getItem('jwtToken') && this.getTokenExpirationDate() > Date.now()){
+    if(localStorage.getItem(this.STORAGE_KEY) && this.getTokenExpirationDate() > Date.now()){
       return true;
     }
     return false;

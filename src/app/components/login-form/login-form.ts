@@ -11,7 +11,7 @@ import { pipe, take } from 'rxjs';
   styleUrl: './login-form.scss',
 })
 
-export class LoginForm implements OnInit{
+export class LoginForm{
   private authService = inject(AuthService);
   private router = inject(Router)
 
@@ -21,12 +21,6 @@ export class LoginForm implements OnInit{
     username: new FormControl('', [Validators.required]),
     password: new FormControl('', [Validators.required]),
   }) 
-
-  ngOnInit(): void {
-    if(this.authService.isAuthenticated()) {
-      this.router.navigate(['/logout'])
-    }
-  }
 
   login(){
     if(this.loginForm.invalid) return;

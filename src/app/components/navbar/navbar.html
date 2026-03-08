@@ -8,6 +8,9 @@
         @if(hasAuthority("VIEW_PRODUCTS")) {
           <button class="nav-button" routerLink="/products">Магазин</button>
         }
+        @if(hasAuthority("MAKE_ORDERS")) {
+          <button class="nav-button" routerLink="/cart">Корзина</button>
+        }
         @if(hasAuthority("VIEW_USER_ORDERS") || hasAuthority("VIEW_ALL_ORDERS")) {
           <button class="nav-button" routerLink="/orders">Заказы</button>
         }
