@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { AuthService } from '../../services/auth-service';
 import { Router } from '@angular/router';
 
@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
   templateUrl: './logout-form.html',
   styleUrl: './logout-form.scss',
 })
-export class LogoutForm{
+export class LogoutForm {
   private authService = inject(AuthService);
   private router = inject(Router);
 

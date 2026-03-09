@@ -1,76 +1,76 @@
 <div class="list-container">
-    @if(isSearchAndSortProducts()) {
-        <div class="filters-panel">
-            <div class="search-box">
-                <input 
-                    type="text" 
-                    placeholder="Поиск по названию, описанию, артикулу..." 
-                    (input)="searchQuery.set($any($event.target).value)"
-                >
-            </div>
+  @if (isSearchAndSortProducts()) {
+    <div class="filters-panel">
+      <div class="search-box">
+        <input
+          type="text"
+          placeholder="Поиск по названию, описанию, артикулу..."
+          (input)="searchQuery.set($any($event.target).value)"
+        />
+      </div>
 
-            <div class="select-group">
-                <select (change)="selectedCategory.set($any($event.target).value)">
-                    <option value="">Все категории</option>
-                    @for (category of categories(); track category) {
-                        <option [value]="category.id">{{category.name}}</option>
-                    }
-                </select>
+      <div class="select-group">
+        <select (change)="selectedCategory.set($any($event.target).value)">
+          <option value="">Все категории</option>
+          @for (category of categories(); track category) {
+            <option [value]="category.id">{{ category.name }}</option>
+          }
+        </select>
 
-                <select (change)="selectedProvider.set($any($event.target).value)">
-                    <option value="">Все поставщики</option>
-                    @for (provider of providers(); track provider) {
-                        <option [value]="provider.id">{{provider.name}}</option>
-                    }
-                </select>
+        <select (change)="selectedProvider.set($any($event.target).value)">
+          <option value="">Все поставщики</option>
+          @for (provider of providers(); track provider) {
+            <option [value]="provider.id">{{ provider.name }}</option>
+          }
+        </select>
 
-                <select (change)="selectedManufacturer.set($any($event.target).value)">
-                    <option value="">Все производители</option>
-                    @for (manufacturer of manufacturers(); track manufacturer) {
-                        <option [value]="manufacturer.id">{{manufacturer.name}}</option>
-                    }
-                </select>
-            </div>
+        <select (change)="selectedManufacturer.set($any($event.target).value)">
+          <option value="">Все производители</option>
+          @for (manufacturer of manufacturers(); track manufacturer) {
+            <option [value]="manufacturer.id">{{ manufacturer.name }}</option>
+          }
+        </select>
+      </div>
 
-            <div class="sort-group">
-                <select (change)="setSort($any($event.target).value)">
-                    <option value="name">По названию</option>
-                    <option value="price">По цене</option>
-                    <option value="article">По артикулу</option>
-                    <option value="amount">По количеству</option>
-                    <option value="discount">По скидке</option>
-                </select>
+      <div class="sort-group">
+        <select (change)="setSort($any($event.target).value)">
+          <option value="name">По названию</option>
+          <option value="price">По цене</option>
+          <option value="article">По артикулу</option>
+          <option value="amount">По количеству</option>
+          <option value="discount">По скидке</option>
+        </select>
 
-                <!-- Кнопка изменения направления -->
-                <button class="direction-button" (click)="sortDirection.set(sortDirection() * -1)">
-                    @if (sortDirection() === 1) {
-                        <span>↓ А-Я | 0-9</span>
-                    } @else {
-                        <span>↑ Я-А | 9-0</span>
-                    }
-                </button>
-                
-                <label class="stock-checkbox">
-                    <input type="checkbox" (change)="onlyInStock.set($any($event.target).checked)">
-                    В наличии
-                </label>
-            </div>
-        </div>
+        <!-- Кнопка изменения направления -->
+        <button class="direction-button" (click)="sortDirection.set(sortDirection() * -1)">
+          @if (sortDirection() === 1) {
+            <span>↓ А-Я | 0-9</span>
+          } @else {
+            <span>↑ Я-А | 9-0</span>
+          }
+        </button>
+
+        <label class="stock-checkbox">
+          <input type="checkbox" (change)="onlyInStock.set($any($event.target).checked)" />
+          В наличии
+        </label>
+      </div>
+    </div>
+  }
+  @if (isEditProducts()) {
+    @if (errorMessage()) {
+      <div class="error-container">{{ errorMessage() }}</div>
     }
-    @if(isEditProducts()) {
-        @if(errorMessage()) {
-            <div class="error-container">{{errorMessage()}}</div>
-        }
-        <div class="add-form-container">
-            <button (click)="createProduct()">Создать товар</button>
-        </div>
-    }
+    <div class="add-form-container">
+      <button (click)="createProduct()">Создать товар</button>
+    </div>
+  }
 
-    @for (product of filteredProducts(); track product.article) {
-        <div #card [id]="product.article">
-            <app-product-component [product]="product"></app-product-component>
-        </div>
-    } @empty {
-        <div class="empty-list">Товары не найдены</div>
-    }
+  @for (product of filteredProducts(); track product.article) {
+    <div #card [id]="product.article">
+      <app-product-component [product]="product"></app-product-component>
+    </div>
+  } @empty {
+    <div class="empty-list">Товары не найдены</div>
+  }
 </div>

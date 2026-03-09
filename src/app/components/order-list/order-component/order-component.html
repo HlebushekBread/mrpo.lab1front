@@ -1,35 +1,48 @@
 <div class="wrapper-container">
-    @if(isEditOrders()) {
-        <img class="edit-button" src="icons/edit.png" (click)="editOrder(order().id)">
-    }
-    <div [ngClass]="{'order-card': true, 'highlighted': navigationState.id == order().id}">
-        <div class="card-header">
-            <div class="order-info">
-                <span class="order-number">Заказ <b>#{{order().id}}</b></span> 
-                <span class="order-date"> от <b>{{order().orderDate.substring(0,10)}}</b></span>
-                <div class="user-details">
-                    Для <b>{{order().user.username}}</b> <span class="full-name"> ({{order().user.fullName}})</span>
-                </div>
-            </div>
-            <div class="status-info" [class.status-pending]="order().status.id != 2">
-                <span class="status-label">Статус: <b>{{order().status.name}}</b></span>
-                <br>
-                @if(order().status.id != 2) {
-                    <div class="receive-code">Код: <b>{{order().receiveCode}}</b></div>
-                }
-            </div>
+  @if (isEditOrders()) {
+    <img class="edit-button" src="icons/edit.png" (click)="editOrder(order().id)" />
+  }
+  <div [ngClass]="{ 'order-card': true, highlighted: navigationState.id == order().id }">
+    <div class="card-header">
+      <div class="order-info">
+        <span class="order-number"
+          >Заказ <b>#{{ order().id }}</b></span
+        >
+        <span class="order-date">
+          от <b>{{ order().orderDate.substring(0, 10) }}</b></span
+        >
+        <div class="user-details">
+          Для <b>{{ order().user.username }}</b>
+          <span class="full-name"> ({{ order().user.fullName }})</span>
         </div>
-
-        <div class="delivery-section">
-            <div class="delivery-info">
-                Прибудет: <b>{{order().deliveryDate.substring(0,10)}}</b><br>
-                ПВЗ: <b>{{order().address.fullAddress}}</b>
-            </div>
-        </div>
-        <div class="product-list">
-            @for (orderProduct of order().orderProducts; track orderProduct) {
-                <app-order-product-component [amount]="orderProduct.amount" [product]="orderProduct.product"></app-order-product-component>
-            }
-        </div>
+      </div>
+      <div class="status-info" [class.status-pending]="order().status.id != 2">
+        <span class="status-label"
+          >Статус: <b>{{ order().status.name }}</b></span
+        >
+        <br />
+        @if (order().status.id != 2) {
+          <div class="receive-code">
+            Код: <b>{{ order().receiveCode }}</b>
+          </div>
+        }
+      </div>
     </div>
+
+    <div class="delivery-section">
+      <div class="delivery-info">
+        Прибудет: <b>{{ order().deliveryDate.substring(0, 10) }}</b
+        ><br />
+        ПВЗ: <b>{{ order().address.fullAddress }}</b>
+      </div>
+    </div>
+    <div class="product-list">
+      @for (orderProduct of order().orderProducts; track orderProduct) {
+        <app-order-product-component
+          [amount]="orderProduct.amount"
+          [product]="orderProduct.product"
+        ></app-order-product-component>
+      }
+    </div>
+  </div>
 </div>

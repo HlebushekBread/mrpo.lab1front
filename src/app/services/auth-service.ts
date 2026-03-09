@@ -1,6 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { BehaviorSubject, tap } from 'rxjs';
+import { tap } from 'rxjs';
+
+interface token {
+  token: string;
+}
 
 @Injectable({
   providedIn: 'root',
@@ -10,25 +14,27 @@ export class AuthService {
 
   private http = inject(HttpClient);
 
-  login(user:{username: string, password: string}){
+  login(user: { username: string; password: string }) {
     return this.http.post('http://localhost:8080/api/auth/login', user).pipe(
-      tap(response => {
-        this.doLoginUser(response);
-      })
+      tap((response) => {
+        this.doLoginUser(response as token);
+      }),
     );
   }
 
-  private doLoginUser(token: any){
+  private doLoginUser(token: token) {
     localStorage.setItem(this.STORAGE_KEY, token.token);
   }
 
-  logout(){
+  logout() {
     localStorage.removeItem(this.STORAGE_KEY);
   }
 
-  getTokenPayload(){
+  getTokenPayload() {
     const token = localStorage.getItem(this.STORAGE_KEY);
-    if (!token) { return null; }
+    if (!token) {
+      return null;
+    }
 
     try {
       const parts = token.split('.');
@@ -49,7 +55,6 @@ export class AuthService {
 
       const payload = new TextDecoder('utf-8').decode(bytes);
       return JSON.parse(payload);
-
     } catch (error) {
       console.error('Ошибка при декодировании токена: ', error);
       return null;
@@ -58,40 +63,40 @@ export class AuthService {
 
   private tokenPayload = this.getTokenPayload();
 
-  getTokenFullName(){
-    try{
+  getTokenFullName() {
+    try {
       return this.tokenPayload.fullName;
-    }catch(err){
-      return ''
-    }
-  }
-  
-  getTokenRole(){
-    try{
-      return this.tokenPayload.role;
-    }catch(err){
-      return "Неавторизованный";
+    } catch {
+      return '';
     }
   }
 
-  getTokenAuthorities(){
-    try{
+  getTokenRole() {
+    try {
+      return this.tokenPayload.role;
+    } catch {
+      return 'Неавторизованный';
+    }
+  }
+
+  getTokenAuthorities() {
+    try {
       return this.tokenPayload.authorities;
-    }catch(err){
+    } catch {
       return [];
     }
   }
 
-  getTokenExpirationDate(){
-    try{
+  getTokenExpirationDate() {
+    try {
       return this.tokenPayload.exp * 1000;
-    }catch(err){
+    } catch {
       return 0;
     }
   }
 
-  isAuthenticated(): boolean{
-    if(localStorage.getItem(this.STORAGE_KEY) && this.getTokenExpirationDate() > Date.now()){
+  isAuthenticated(): boolean {
+    if (localStorage.getItem(this.STORAGE_KEY) && this.getTokenExpirationDate() > Date.now()) {
       return true;
     }
     return false;

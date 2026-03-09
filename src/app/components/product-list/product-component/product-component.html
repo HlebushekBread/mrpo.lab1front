@@ -1,61 +1,69 @@
 <div class="wrapper-container">
-    @if(isEditProducts()) {
-        <img class="edit-button" src="icons/edit.png" (click)="editProduct(product().article)">
-    }
-    <div [ngClass]="{'product-card': true, 'highlighted': navigationState.article == product().article}">
-        <div class="img-container">
-            <img [src]="imageUrl().url" (error)="$event.target.src = 'placeholder.png'">
-        </div>
-        <div class="information-container">
-            <div class="information-header">
-                <span class="article-tag">#{{product().article}}</span>
-                <h3 class="product-title">{{product().category.name}} | {{product().name}}</h3>
-            </div>
-
-            <p class="description">{{product().description}}</p>
-
-            <div class="meta-info">
-                <div class="secondary-info">Производитель: <span>{{product().manufacturer.name}}</span></div>
-                <div class="secondary-info">Поставщик: <span>{{product().provider.name}}</span></div>
-            </div>
-
-            <div class="purchase-block">
-                <div class="price-section">
-                    <span class="label">Цена:</span>
-                    <div class="price-wrapper">
-                        @if(product().discount > 0) {
-                            <span class="old-price">{{product().price | number:'1.2-2'}} ₽</span>
-                            <span class="current-price highlighted">{{(product().price * (1 - product().discount / 100)) | number:'1.2-2'}} ₽</span>
-                        } @else {
-                            <span class="current-price">{{product().price | number:'1.2-2'}} ₽</span>
-                        }
-                    </div>
-                </div>
-
-                @if(isMakeOrders()) {
-                    <div class="cart-controls">
-                        @if (getProductCount(product().article) === 0) {
-                            <button class="add-to-cart-btn" (click)="addToCart(product().article)">
-                                В корзину
-                            </button>
-                        } @else {
-                            <div class="counter-container">
-                                <button (click)="decrementCount(product().article)">−</button>
-                                <span class="count-value">{{ getProductCount(product().article) }}</span>
-                                <button (click)="incrementCount(product().article)">+</button>
-                            </div>
-                        }
-                    </div>
-                }
-            </div>
-            
-            <div class="stock-info secondary-info">
-                Осталось: <strong>{{product().amount}} {{product().unit.name}}</strong>
-            </div>
-        </div>
-        
-        <div [ngClass]="{'discount-container': true, 'highlighted': product().discount>15}">
-            <p>{{product().discount}}%<br>Скидка</p>
-        </div>
+  @if (isEditProducts()) {
+    <img class="edit-button" src="icons/edit.png" (click)="editProduct(product().article)" />
+  }
+  <div
+    [ngClass]="{ 'product-card': true, highlighted: navigationState.article == product().article }"
+  >
+    <div class="img-container">
+      <img [src]="imageUrl().url" (error)="$event.target.src = 'placeholder.png'" />
     </div>
+    <div class="information-container">
+      <div class="information-header">
+        <span class="article-tag">#{{ product().article }}</span>
+        <h3 class="product-title">{{ product().category.name }} | {{ product().name }}</h3>
+      </div>
+
+      <p class="description">{{ product().description }}</p>
+
+      <div class="meta-info">
+        <div class="secondary-info">
+          Производитель: <span>{{ product().manufacturer.name }}</span>
+        </div>
+        <div class="secondary-info">
+          Поставщик: <span>{{ product().provider.name }}</span>
+        </div>
+      </div>
+
+      <div class="purchase-block">
+        <div class="price-section">
+          <span class="label">Цена:</span>
+          <div class="price-wrapper">
+            @if (product().discount > 0) {
+              <span class="old-price">{{ product().price | number: '1.2-2' }} ₽</span>
+              <span class="current-price highlighted"
+                >{{ product().price * (1 - product().discount / 100) | number: '1.2-2' }} ₽</span
+              >
+            } @else {
+              <span class="current-price">{{ product().price | number: '1.2-2' }} ₽</span>
+            }
+          </div>
+        </div>
+
+        @if (isMakeOrders()) {
+          <div class="cart-controls">
+            @if (getProductCount(product().article) === 0) {
+              <button class="add-to-cart-btn" (click)="addToCart(product().article)">
+                В корзину
+              </button>
+            } @else {
+              <div class="counter-container">
+                <button (click)="decrementCount(product().article)">−</button>
+                <span class="count-value">{{ getProductCount(product().article) }}</span>
+                <button (click)="incrementCount(product().article)">+</button>
+              </div>
+            }
+          </div>
+        }
+      </div>
+
+      <div class="stock-info secondary-info">
+        Осталось: <strong>{{ product().amount }} {{ product().unit.name }}</strong>
+      </div>
+    </div>
+
+    <div [ngClass]="{ 'discount-container': true, highlighted: product().discount > 15 }">
+      <p>{{ product().discount }}%<br />Скидка</p>
+    </div>
+  </div>
 </div>

@@ -3,8 +3,8 @@ import { NavigationExtras, Router } from '@angular/router';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { switchMap } from 'rxjs';
 import { ImageService } from '../../../../services/image-service';
-import { Product } from '../../../../models/product.type';
 import { CommonModule } from '@angular/common';
+import { Product } from '../../../../services/product-service';
 
 @Component({
   selector: 'app-order-product-component',
@@ -20,16 +20,14 @@ export class OrderProductComponent {
   amount = input.required<number>();
 
   imageUrl = toSignal(
-    toObservable(this.product).pipe(
-      switchMap(p => this.imageService.getImageLink(p?.article))
-    ),
-    { initialValue: { url: 'placeholder.png' } }
+    toObservable(this.product).pipe(switchMap((p) => this.imageService.getImageLink(p?.article))),
+    { initialValue: { url: 'placeholder.png' } },
   );
 
   openProduct(article: string) {
     const navigationExtras: NavigationExtras = {
-      state: {article: article}
+      state: { article: article },
     };
-    this.router.navigate(["/products"], navigationExtras);
+    this.router.navigate(['/products'], navigationExtras);
   }
 }

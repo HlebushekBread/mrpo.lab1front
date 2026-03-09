@@ -22,7 +22,8 @@ $font-family: 'Times New Roman', Times, serif;
   font-family: $font-family;
 
   // Общие стили для всех полей ввода
-  input[type="text"], select {
+  input[type='text'],
+  select {
     padding: 0.6rem 1rem;
     border: 1px solid $border-color;
     border-radius: $border-radius / 2;
@@ -44,7 +45,8 @@ $font-family: 'Times New Roman', Times, serif;
     }
   }
 
-  .select-group, .sort-group {
+  .select-group,
+  .sort-group {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
@@ -134,7 +136,6 @@ $font-family: 'Times New Roman', Times, serif;
   font-style: italic;
   font-size: 1.5rem;
 }
-
 
 .list-container {
   display: flex;

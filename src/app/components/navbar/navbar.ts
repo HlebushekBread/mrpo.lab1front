@@ -13,8 +13,8 @@ export class NavBar {
   private authService = inject(AuthService);
 
   isAuthenticated = signal(this.authService.isAuthenticated());
-  
-  hasAuthority(authority: string){
+
+  hasAuthority(authority: string) {
     return this.authService.getTokenAuthorities().includes(authority);
   }
 }

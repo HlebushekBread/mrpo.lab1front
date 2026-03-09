@@ -8,39 +8,39 @@ import { OrderEditComponent } from './components/order-edit-component/order-edit
 import { CartComponent } from './components/cart-component/cart-component';
 
 export const routes: Routes = [
-    {
-        path: "",
-        pathMatch: "full",
-        component: LoginForm
-    },
-    {
-        path: "cart",
-        pathMatch: "full",
-        component: CartComponent
-    },
-    {
-        path: "products",
-        pathMatch: "full",
-        component: ProductList
-    },
-    {
-        path: "products/edit/:article",
-        pathMatch: "full",
-        component: ProductEditComponent
-    },
-    {
-        path: "orders",
-        pathMatch: "full",
-        component: OrderList
-    },
-    {
-        path: "orders/edit/:id",
-        pathMatch: "full",
-        component: OrderEditComponent
-    },
-    {
-        path: "logout",
-        pathMatch: "full",
-        component: LogoutForm
-    }
+  {
+    path: '',
+    pathMatch: 'full',
+    component: LoginForm,
+  },
+  {
+    path: 'cart',
+    pathMatch: 'full',
+    component: CartComponent,
+  },
+  {
+    path: 'products',
+    pathMatch: 'full',
+    component: ProductList,
+  },
+  {
+    path: 'products/edit/:article',
+    pathMatch: 'full',
+    component: ProductEditComponent,
+  },
+  {
+    path: 'orders',
+    pathMatch: 'full',
+    component: OrderList,
+  },
+  {
+    path: 'orders/edit/:id',
+    pathMatch: 'full',
+    component: OrderEditComponent,
+  },
+  {
+    path: 'logout',
+    pathMatch: 'full',
+    component: LogoutForm,
+  },
 ];

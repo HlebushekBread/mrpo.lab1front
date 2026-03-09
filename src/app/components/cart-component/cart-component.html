@@ -1,45 +1,43 @@
 <div class="wrapper-container">
-    <div class="cart-card">
-        <div class="card-header">
-            <div class="cart-title">
-                <span>Корзина</span>
-                <div class="cart-count">Товаров: <b>{{cartItems().length}}</b></div>
-            </div>
-            <button class="clear-button" (click)="clearCart()">
-                Очистить
-            </button>
+  <div class="cart-card">
+    <div class="card-header">
+      <div class="cart-title">
+        <span>Корзина</span>
+        <div class="cart-count">
+          Товаров: <b>{{ cartItems().length }}</b>
         </div>
-
-        <div class="product-list">
-            @for (item of cartItems(); track item.article) {
-                <div class="cart-item">
-                    <app-cart-product-component 
-                        [product]="productDetails().get(item.article)" 
-                        [amount]="item.count">
-                    </app-cart-product-component>
-                    <div class="item-controls">
-                        <button class="action-btn" (click)="removeItem(item.article)">X</button>
-                    </div>
-                </div>
-            } @empty {
-                <div class="empty-state">Корзина пока пуста</div>
-            }
-        </div>
-
-        <div class="summary-section">
-            <div class="order-summary">
-                <span class="summary-label">Итого к оплате:</span>
-                <div class="summary-details">
-                    @let summary = totalPrice();
-                    @if(totalPrice().subtotal != totalPrice().total) {
-                        <span class="summary-subvalue">{{ totalPrice().subtotal | number:'1.2-2' }} ₽</span>
-                    }
-                    <span class="summary-value">{{ summary.total | number:'1.2-2' }} ₽</span>
-                </div>
-            </div>
-            <button class="checkout-button" [disabled]="cartItems().length === 0" (click)="checkout()">
-                Оформить заказ
-            </button>
-        </div>
+      </div>
+      <button class="clear-button" (click)="clearCart()">Очистить</button>
     </div>
+
+    <div class="product-list">
+      @for (item of fullCartItems(); track item.article) {
+        <div class="cart-item">
+          <app-cart-product-component [product]="item.product" [amount]="item.count">
+          </app-cart-product-component>
+          <div class="item-controls">
+            <button class="action-btn" (click)="removeItem(item.article)">X</button>
+          </div>
+        </div>
+      } @empty {
+        <div class="empty-state">Корзина пока пуста</div>
+      }
+    </div>
+
+    <div class="summary-section">
+      <div class="order-summary">
+        <span class="summary-label">Итого к оплате:</span>
+        <div class="summary-details">
+          @let summary = totalPrice();
+          @if (totalPrice().subtotal != totalPrice().total) {
+            <span class="summary-subvalue">{{ totalPrice().subtotal | number: '1.2-2' }} ₽</span>
+          }
+          <span class="summary-value">{{ summary.total | number: '1.2-2' }} ₽</span>
+        </div>
+      </div>
+      <button class="checkout-button" [disabled]="cartItems().length === 0" (click)="checkout()">
+        Оформить заказ
+      </button>
+    </div>
+  </div>
 </div>

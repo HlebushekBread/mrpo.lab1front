@@ -1,10 +1,8 @@
-import { Component, inject, input, Input, OnInit, signal } from '@angular/core';
+import { Component, inject, input, OnInit, signal } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { ImageService } from '../../services/image-service';
-import { AuthService } from '../../services/auth-service';
-import { catchError, map, Observable, of, switchMap } from 'rxjs';
-import { Product } from '../../models/product.type';
-import { ProductService } from '../../services/product-service';
+import { switchMap } from 'rxjs';
+import { Product, ProductService } from '../../services/product-service';
 import { CommonModule } from '@angular/common';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { UnitService } from '../../services/unit-service';
@@ -19,8 +17,8 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './product-edit-component.html',
   styleUrl: './product-edit-component.scss',
 })
-export class ProductEditComponent implements OnInit{
-  private router = inject(Router)
+export class ProductEditComponent implements OnInit {
+  private router = inject(Router);
   private unitService = inject(UnitService);
   private categoryService = inject(CategoryService);
   private manufacturerService = inject(ManufacturerService);
@@ -30,32 +28,32 @@ export class ProductEditComponent implements OnInit{
 
   article = input.required<string>();
   article$ = toObservable(this.article);
-  errorMessage = signal("");
+  errorMessage = signal('');
 
   product = signal<Product | null>(null);
 
   defaultProduct = {
-    name: "",
-    unit: { id: 1, name: "" },
+    name: '',
+    unit: { id: 1, name: '' },
     price: 0,
-    provider: { id: 1, name: "" },
-    manufacturer: { id: 1, name: "" },
-    category: { id: 1, name: "" },
+    provider: { id: 1, name: '' },
+    manufacturer: { id: 1, name: '' },
+    category: { id: 1, name: '' },
     discount: 0,
     amount: 0,
-    description: ""
-  }
+    description: '',
+  };
 
   ngOnInit(): void {
-    if(this.article() === "new"){
+    if (this.article() === 'new') {
       this.product.set({
-        article: "000000",
-        ...this.defaultProduct
+        article: '000000',
+        ...this.defaultProduct,
       });
     } else {
-      this.article$.pipe(
-        switchMap(article => this.productService.getByArticle(article)),
-      ).subscribe(product => this.product.set(product));
+      this.article$
+        .pipe(switchMap((article) => this.productService.getByArticle(article)))
+        .subscribe((product) => this.product.set(product));
     }
   }
 
@@ -65,44 +63,53 @@ export class ProductEditComponent implements OnInit{
   providers = toSignal(this.providerService.getAll(), { initialValue: [] });
 
   private product$ = toObservable(this.article).pipe(
-    switchMap(art => this.productService.getByArticle(art))
+    switchMap((art) => this.productService.getByArticle(art)),
   );
 
   imageUrl = toSignal(
-    this.product$.pipe(
-      switchMap(p => this.imageService.getImageLink(p?.article))
-    ),
-    { initialValue: { url: 'placeholder.png' } }
+    this.product$.pipe(switchMap((p) => this.imageService.getImageLink(p?.article))),
+    { initialValue: { url: 'placeholder.png' } },
   );
 
   previewUrl = signal<string | null>(null);
   selectedFile: File | null = null;
 
   revertChanges() {
-    this.router.navigate(["/products"])
+    this.router.navigate(['/products']);
   }
 
   onFileSelected(event: Event) {
     const input = event.target as HTMLInputElement;
     const file = input.files?.[0];
-    
+
     if (file && file.type.startsWith('image/')) {
-      this.errorMessage.set("")
-      const name = `${this.product() ? this.product()?.article : "undefined"}`;
+      this.errorMessage.set('');
+      const name = 'file';
 
       this.selectedFile = new File([file], name, { type: file.type });
 
       if (this.previewUrl()) {
-          URL.revokeObjectURL(this.previewUrl()!);
+        URL.revokeObjectURL(this.previewUrl()!);
       }
       this.previewUrl.set(URL.createObjectURL(this.selectedFile));
       console.log('Файл загружен:', this.selectedFile.name);
     } else {
-      this.errorMessage.set("Пожалуйста, выберите корректное изображение")
+      this.errorMessage.set('Пожалуйста, выберите корректное изображение');
     }
   }
 
-  submitForm(formDataRaw: any) {
+  submitForm(formDataRaw: {
+    article: string;
+    name: string;
+    categoryId: string;
+    description: string;
+    manufacturerId: string;
+    providerId: string;
+    price: string;
+    discount: string;
+    amount: string;
+    unitId: string;
+  }) {
     const data = new FormData();
 
     const productDto = {
@@ -115,11 +122,11 @@ export class ProductEditComponent implements OnInit{
       price: Number(formDataRaw.price),
       discount: Number(formDataRaw.discount),
       amount: Number(formDataRaw.amount),
-      unitId: Number(formDataRaw.unitId)
+      unitId: Number(formDataRaw.unitId),
     };
 
     const jsonBlob = new Blob([JSON.stringify(productDto)], {
-      type: 'application/json'
+      type: 'application/json',
     });
 
     data.append('product', jsonBlob);
@@ -131,20 +138,20 @@ export class ProductEditComponent implements OnInit{
     this.productService.saveProduct(data).subscribe({
       next: (response) => {
         const navigationExtras: NavigationExtras = {
-          state: {article: response.article }
+          state: { article: response.article },
         };
-        this.router.navigate(["/products"], navigationExtras);
+        this.router.navigate(['/products'], navigationExtras);
       },
-      error: (err) => console.error('Ошибка Spring:', err)
+      error: (err) => console.error('Ошибка Spring:', err),
     });
   }
 
   deleteProduct() {
     this.productService.deleteProduct(this.article()).subscribe({
       next: () => {
-        this.router.navigate(["/products"]);
+        this.router.navigate(['/products']);
       },
-      error: (err) => console.error('Ошибка Spring:', err)
+      error: (err) => console.error('Ошибка Spring:', err),
     });
   }
 }

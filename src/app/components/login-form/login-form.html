@@ -1,29 +1,27 @@
 <div class="form-container">
-    @if(errorMessage() != "") {
-        <div class="error-container">
-            Ошибка: Неверное имя пользователя или пароль
-        </div>
-    }
-    <form class="main-form" [formGroup]="loginForm" (submit)="login()">
-        <div>
-            <label for="usernameInput"> Имя пользователя (почта): </label>
-            <input formControlName="username" id="usernameInput" type="text" name="username"/>
-        </div>
-        <div>
-            <label for="passwordInput"> Пароль: </label>
-            <input formControlName="password" id="passwordInput" type="password" name="password"/>
-        </div>
-        <div>
-            <input type="submit" value="Вход"/>
-        </div>
-        <p>Или</p>
-        <form class="guest-form" (submit)="loginAsGuest()">
-            <input type="submit" value="Войти как гость"/>
-        </form >
-    </form >
+  @if (errorMessage() != '') {
+    <div class="error-container">Ошибка: Неверное имя пользователя или пароль</div>
+  }
+  <form class="main-form" [formGroup]="loginForm" (submit)="login()">
+    <div>
+      <label for="usernameInput"> Имя пользователя (почта): </label>
+      <input formControlName="username" id="usernameInput" type="text" name="username" />
+    </div>
+    <div>
+      <label for="passwordInput"> Пароль: </label>
+      <input formControlName="password" id="passwordInput" type="password" name="password" />
+    </div>
+    <div>
+      <input type="submit" value="Вход" />
+    </div>
+    <p>Или</p>
+    <form class="guest-form" (submit)="loginAsGuest()">
+      <input type="submit" value="Войти как гость" />
+    </form>
+  </form>
 </div>
 <div>
-    <p>Admin   94d5ous@gmail.com    uzWC67</p>
-    <p>Manager 1diph5e@tutanota.com 8ntwUp</p>
-    <p>User    12olik5m@mail.com kaaG12</p>
+  <p>Admin 94d5ous@gmail.com uzWC67</p>
+  <p>Manager 1diph5e@tutanota.com 8ntwUp</p>
+  <p>User 12olik5m@mail.com kaaG12</p>
 </div>

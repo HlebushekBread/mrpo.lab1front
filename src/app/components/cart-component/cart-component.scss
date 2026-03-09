@@ -7,179 +7,184 @@ $bg-color: #fff;
 $border-radius: 15px;
 $font-family: 'Times New Roman', Times, serif;
 
-.wrapper-container{
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.wrapper-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
-    .cart-card {
-        background: $bg-color;
-        padding: 2rem;
-        margin: 2rem 0;
-        border-radius: $border-radius;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-        width: 100%;
-        max-width: 1000px;
-        font-family: $font-family;
-        color: $text-color;
+  .cart-card {
+    background: $bg-color;
+    padding: 2rem;
+    margin: 2rem 0;
+    border-radius: $border-radius;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 1000px;
+    font-family: $font-family;
+    color: $text-color;
 
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid $border-color;
-            padding-bottom: 1rem;
-            margin-bottom: 1.5rem;
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid $border-color;
+      padding-bottom: 1rem;
+      margin-bottom: 1.5rem;
 
-            .cart-title {
-                font-size: 1.5rem;
-                .cart-count {
-                    font-size: 1rem;
-                    color: $secondary-text;
-                    margin-top: 4px;
-                }
-            }
-
-            .clear-button {
-                padding: 1rem;
-                border: none;
-                border-radius: $border-radius / 2;
-                font-family: $font-family;
-                font-size: 1.2rem;
-                font-weight: bold;
-                cursor: pointer;
-                transition: all 0.2s ease;
-                background-color: #e53e3e;
-                color: white;
-
-                &:hover {
-                background-color: #7F1D1D;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-                }
-
-                &:active {
-                transform: translateY(1px);
-                }
-            }
+      .cart-title {
+        font-size: 1.5rem;
+        .cart-count {
+          font-size: 1rem;
+          color: $secondary-text;
+          margin-top: 4px;
         }
-    }
+      }
 
-    .product-list {
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-        margin-bottom: 2rem;
-
-        .cart-item {
-            display: flex;
-            align-items: center;
-            width: 100%;
-            gap: 10px;
-
-            app-cart-product-component {
-                display: block;
-                width: 100%;
-            }
-
-            .item-controls {
-                .action-btn {
-                    padding: 1rem;
-                    border: none;
-                    width: 50px;
-                    height: 50px;
-                    border-radius: $border-radius / 2;
-                    font-family: $font-family;
-                    font-size: 1.2rem;
-                    font-weight: bold;
-                    cursor: pointer;
-                    transition: all 0.2s ease;
-                    background-color: #e53e3e;
-                    color: white;
-
-                    &:hover {
-                    background-color: #7F1D1D;
-                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-                    }
-
-                    &:active {
-                    transform: translateY(1px);
-                    }
-                }
-            }
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 3rem;
-            color: $secondary-text;
-            font-size: 1.2rem;
-            font-style: italic;
-        }
-    }
-
-    .summary-section {
-        background: $bg-color;
-        padding: 1.5rem;
+      .clear-button {
+        padding: 1rem;
+        border: none;
         border-radius: $border-radius / 2;
-        border: solid 2px $border-color;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+        font-family: $font-family;
+        font-size: 1.2rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        background-color: #e53e3e;
+        color: white;
 
-        .order-summary {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            .summary-label {
-                margin-right: 1.5rem;
-                font-family: $font-family;
-                font-size: 1.4rem;
-                font-weight: 600;
-                color: $text-color;
-            }
-
-            .summary-details {
-                display: flex;
-                align-items: baseline;
-                gap: 1rem;
-
-                .summary-subvalue {
-                font-family: $font-family;
-                font-size: 1.5rem;
-                text-decoration: line-through;
-                font-weight: 900;
-                color: $text-color;
-                }
-
-                .summary-value {
-                font-family: $font-family;
-                font-size: 2rem;
-                font-weight: 900;
-                color: #e74c3c;
-                }
-            }
+        &:hover {
+          background-color: #7f1d1d;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
 
-        .checkout-button {
-            background-color: $primary-color;
-            border: none;
-            padding: 1rem 2rem;
-            font-size: 1.2rem;
-            font-weight: bold;
-            font-family: $font-family;
-            border-radius: $border-radius / 2;
-            cursor: pointer;
-            transition: all 0.3 ease;
-
-            &:hover:not(:disabled) {
-                background-color: $accent-color;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            }
-
-            &:active { transform: translateY(1px); }
-
-            &:disabled { background: #ccc; cursor: not-allowed; }
+        &:active {
+          transform: translateY(1px);
         }
+      }
     }
+  }
+
+  .product-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+
+    .cart-item {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      gap: 10px;
+
+      app-cart-product-component {
+        display: block;
+        width: 100%;
+      }
+
+      .item-controls {
+        .action-btn {
+          padding: 1rem;
+          border: none;
+          width: 50px;
+          height: 50px;
+          border-radius: $border-radius / 2;
+          font-family: $font-family;
+          font-size: 1.2rem;
+          font-weight: bold;
+          cursor: pointer;
+          transition: all 0.2s ease;
+          background-color: #e53e3e;
+          color: white;
+
+          &:hover {
+            background-color: #7f1d1d;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+          }
+
+          &:active {
+            transform: translateY(1px);
+          }
+        }
+      }
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3rem;
+      color: $secondary-text;
+      font-size: 1.2rem;
+      font-style: italic;
+    }
+  }
+
+  .summary-section {
+    background: $bg-color;
+    padding: 1.5rem;
+    border-radius: $border-radius / 2;
+    border: solid 2px $border-color;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    .order-summary {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      .summary-label {
+        margin-right: 1.5rem;
+        font-family: $font-family;
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: $text-color;
+      }
+
+      .summary-details {
+        display: flex;
+        align-items: baseline;
+        gap: 1rem;
+
+        .summary-subvalue {
+          font-family: $font-family;
+          font-size: 1.5rem;
+          text-decoration: line-through;
+          font-weight: 900;
+          color: $text-color;
+        }
+
+        .summary-value {
+          font-family: $font-family;
+          font-size: 2rem;
+          font-weight: 900;
+          color: #e74c3c;
+        }
+      }
+    }
+
+    .checkout-button {
+      background-color: $primary-color;
+      border: none;
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      font-weight: bold;
+      font-family: $font-family;
+      border-radius: $border-radius / 2;
+      cursor: pointer;
+      transition: all 0.3 ease;
+
+      &:hover:not(:disabled) {
+        background-color: $accent-color;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      &:active {
+        transform: translateY(1px);
+      }
+
+      &:disabled {
+        background: #ccc;
+        cursor: not-allowed;
+      }
+    }
+  }
 }
