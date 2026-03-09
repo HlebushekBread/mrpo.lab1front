@@ -1,15 +1,15 @@
 import { Injectable, signal, effect } from '@angular/core';
 
 export interface CartItem {
-  article: string;
-  count: number;
+  productArticle: string;
+  amount: number;
 }
 
 @Injectable({
   providedIn: 'root',
 })
 export class CartService {
-  private readonly STORAGE_KEY = 'shopping_cart';
+  private readonly STORAGE_KEY = 'shoppingCart';
 
   private cartItems = signal<CartItem[]>(this.loadFromStorage());
 
@@ -32,26 +32,30 @@ export class CartService {
   }
 
   getCountByArticle(article: string): number {
-    return this.cartItems().find((i) => i.article === article)?.count ?? 0;
+    return this.cartItems().find((i) => i.productArticle === article)?.amount ?? 0;
   }
 
   addToCart(article: string) {
     this.cartItems.update((items) => {
-      const existingItem = items.find((i) => i.article === article);
+      const existingItem = items.find((i) => i.productArticle === article);
 
       if (existingItem) {
-        return items.map((i) => (i.article === article ? { ...i, count: i.count + 1 } : i));
+        return items.map((i) =>
+          i.productArticle === article ? { ...i, amount: i.amount + 1 } : i,
+        );
       }
 
-      return [...items, { article, count: 1 }];
+      return [...items, { productArticle: article, amount: 1 }];
     });
   }
 
   updateCount(article: string, delta: number) {
     this.cartItems.update((items) =>
       items
-        .map((item) => (item.article === article ? { ...item, count: item.count + delta } : item))
-        .filter((item) => item.count > 0),
+        .map((item) =>
+          item.productArticle === article ? { ...item, amount: item.amount + delta } : item,
+        )
+        .filter((item) => item.amount > 0),
     );
   }
 

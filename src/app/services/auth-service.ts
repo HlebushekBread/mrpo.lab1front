@@ -28,6 +28,7 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem(this.STORAGE_KEY);
+    localStorage.removeItem('shoppingCart');
   }
 
   getTokenPayload() {
@@ -62,6 +63,22 @@ export class AuthService {
   }
 
   private tokenPayload = this.getTokenPayload();
+
+  getTokenId() {
+    try {
+      return this.tokenPayload.id;
+    } catch {
+      return 0;
+    }
+  }
+
+  getTokenUsername() {
+    try {
+      return this.tokenPayload.username;
+    } catch {
+      return '';
+    }
+  }
 
   getTokenFullName() {
     try {

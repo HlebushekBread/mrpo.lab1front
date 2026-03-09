@@ -6,22 +6,29 @@ import { switchMap } from 'rxjs';
 import { AddressService } from '../../services/address-service';
 import { StatusService } from '../../services/status-service';
 import { UserService } from '../../services/user-service';
-import { NavigationExtras, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-order-edit-component',
-  imports: [CommonModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './order-edit-component.html',
   styleUrl: './order-edit-component.scss',
 })
 export class OrderEditComponent implements OnInit {
   private router = inject(Router);
+  private formBuilder = inject(FormBuilder);
   private statusService = inject(StatusService);
   private addressService = inject(AddressService);
   private userService = inject(UserService);
   private productService = inject(ProductService);
   private orderService = inject(OrderService);
+
+  readonly statuses = toSignal(this.statusService.getAll(), { initialValue: [] });
+  readonly addresses = toSignal(this.addressService.getAll(), { initialValue: [] });
+  readonly users = toSignal(this.userService.getAllUserUsers(), { initialValue: [] });
+  readonly products = toSignal(this.productService.getAll(), { initialValue: [] });
 
   id = input.required<string>();
   id$ = toObservable(this.id);
@@ -30,126 +37,103 @@ export class OrderEditComponent implements OnInit {
   order = signal<Order | null>(null);
   orderProducts = signal<{ product: Product; amount: number }[]>([]);
 
-  defaultOrder = {
-    orderDate: new Date().toISOString(),
-    deliveryDate: new Date().toISOString(),
-    address: { id: 1, fullAddress: '' },
-    orderProducts: [],
-    user: {
-      id: 1,
-      role: { id: 1, name: '' },
-      fullName: '',
-      username: '',
-    },
-    receiveCode: 0,
-    status: { id: 1, name: '' },
-  };
+  orderForm: FormGroup = this.formBuilder.group({
+    id: [0],
+    statusId: [null, Validators.required],
+    receiveCode: [0, [Validators.required, Validators.min(0)]],
+    orderDate: [new Date().toISOString().slice(0, 16), Validators.required],
+    deliveryDate: [new Date().toISOString().slice(0, 16), Validators.required],
+    addressId: [null, Validators.required],
+    userId: [null, Validators.required],
+    orderProducts: this.formBuilder.array([], Validators.required),
+  });
+
+  private formValue = toSignal(this.orderForm.valueChanges, {
+    initialValue: this.orderForm.value,
+  });
 
   ngOnInit(): void {
-    if (this.id() === 'new') {
-      this.order.set({ id: 0, ...this.defaultOrder });
-      this.orderProducts.set([]);
-    } else {
+    if (this.id() !== 'new') {
       this.id$.pipe(switchMap((id) => this.orderService.getById(id))).subscribe((order) => {
-        this.order.set(order);
-        this.orderProducts.set([...order.orderProducts]);
+        this.patchForm(order);
       });
     }
   }
 
-  statuses = toSignal(this.statusService.getAll(), { initialValue: [] });
-  addresses = toSignal(this.addressService.getAll(), { initialValue: [] });
-  users = toSignal(this.userService.getAllUserUsers(), { initialValue: [] });
-  products = toSignal(this.productService.getAll(), { initialValue: [] });
+  get orderProductsArray() {
+    return this.orderForm.get('orderProducts') as FormArray;
+  }
+
+  private patchForm(order: Order) {
+    this.orderForm.patchValue({
+      id: order.id,
+      statusId: order.status.id,
+      receiveCode: order.receiveCode,
+      orderDate: order.orderDate.slice(0, 16),
+      deliveryDate: order.deliveryDate.slice(0, 16),
+      addressId: order.address.id,
+      userId: order.user.id,
+    });
+
+    const productControls = order.orderProducts.map((op) =>
+      this.formBuilder.group({
+        productArticle: [op.product.article, Validators.required],
+        amount: [op.amount, [Validators.required, Validators.min(1)]],
+      }),
+    );
+
+    this.orderForm.setControl('orderProducts', this.formBuilder.array(productControls));
+  }
 
   addProduct() {
-    const defaultProduct = this.products()[0];
-    if (!defaultProduct) return;
+    const product = this.products()[0];
+    if (!product) return;
 
-    const newItem = {
-      product: defaultProduct,
-      amount: 1,
-    };
-    this.orderProducts.update((items) => [...items, newItem]);
+    this.orderProductsArray.push(
+      this.formBuilder.group({
+        productArticle: [product.article, Validators.required],
+        amount: [1, [Validators.required, Validators.min(1)]],
+      }),
+    );
   }
 
   removeProduct(index: number) {
-    this.orderProducts.update((items) => items.filter((_, i) => i !== index));
-  }
-
-  updateItemAmount(index: number, amount: string) {
-    this.orderProducts.update((items) => {
-      const newItems = [...items];
-      newItems[index].amount = Number(amount);
-      return newItems;
-    });
-  }
-
-  updateItemProduct(index: number, article: string) {
-    const product = this.products().find((p: Product) => p.article === article);
-
-    if (product && this.orderProducts()[index]) {
-      this.orderProducts.update((items) => {
-        const newItems = [...items];
-        newItems[index] = { ...newItems[index], product: product };
-        return newItems;
-      });
-    }
+    this.orderProductsArray.removeAt(index);
   }
 
   readonly totalPrice = computed(() => {
-    return this.orderProducts().reduce(
-      (acc, item) => {
-        const productInfo = this.products().find(
-          (p: Product) => p.article === item.product.article,
-        );
-        const price = productInfo ? productInfo.price : 0;
-        const discount = productInfo ? productInfo.discount || 0 : 0;
+    const items = this.formValue()?.orderProducts || [];
 
-        const itemTotalBase = price * item.amount;
-        const itemTotalDiscounted = price * (1 - discount / 100) * item.amount;
+    return items.reduce(
+      (acc: { total: number; subtotal: number }, item: OrderProductDto) => {
+        const p = this.products().find((prod) => prod.article === item.productArticle);
+        if (!p) return acc;
 
-        acc.subtotal += itemTotalBase;
-        acc.total += itemTotalDiscounted;
+        const amount = Number(item.amount) || 0;
+        acc.subtotal += p.price * amount;
+        acc.total += p.price * (1 - (p.discount || 0) / 100) * amount;
         return acc;
       },
       { subtotal: 0, total: 0 },
     );
   });
 
-  submitForm(formDataRaw: {
-    id: string;
-    orderDate: string;
-    deliveryDate: string;
-    receiveCode: string;
-    statusId: string;
-    addressId: string;
-    userId: string;
-  }) {
-    const orderProductsDtos: OrderProductDto[] = this.orderProducts().map((item) => ({
-      productArticle: item.product.article,
-      amount: Number(item.amount),
-    }));
+  submitForm() {
+    if (this.orderForm.invalid) {
+      this.orderForm.markAllAsTouched();
+      console.log('Форма невалидна, подсветка активирована');
+      return;
+    }
 
+    const val = this.orderForm.value;
     const orderDto: OrderDto = {
-      id: Number(formDataRaw.id),
-      orderDate: formDataRaw.orderDate,
-      deliveryDate: formDataRaw.deliveryDate,
-      receiveCode: Number(formDataRaw.receiveCode),
-      statusId: Number(formDataRaw.statusId),
-      addressId: Number(formDataRaw.addressId),
-      userId: Number(formDataRaw.userId),
-      orderProductDtos: orderProductsDtos,
+      ...val,
+      orderProductDtos: val.orderProducts,
     };
 
     this.orderService.saveOrder(orderDto).subscribe({
-      next: (response) => {
-        const navigationExtras: NavigationExtras = {
-          state: { id: response.id },
-        };
-        this.router.navigate(['/orders'], navigationExtras);
-      },
-      error: (err) => console.error('Ошибка Spring:', err),
+      next: (res) => this.router.navigate(['/orders'], { state: { id: res.id } }),
+      error: (err) => console.error(err),
     });
   }
 

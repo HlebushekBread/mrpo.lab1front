@@ -51,7 +51,8 @@ $font-family: 'Times New Roman', Times, serif;
     color: $text-color;
 
     &.highlighted {
-      box-shadow: 0 4px 15px rgba($primary-color, 1);
+      border: 2px $primary-color solid;
+      box-shadow: 0 4px 15px rgba($primary-color, 0.5);
     }
 
     .card-header {

@@ -1,60 +1,49 @@
 <div class="wrapper-container">
-  @if (order(); as order) {
+  @if (orderForm) {
     <div class="product-card order-card">
-      <form class="form-section">
-        <!-- Основная информация -->
+      <form class="form-section" [formGroup]="orderForm" (ngSubmit)="submitForm()">
         <section class="form-group">
           <div class="form-grid">
-            <input #idInput type="hidden" readonly [value]="order.id" />
+            <input type="hidden" formControlName="id" />
 
             <label class="form-field">
               <span class="label-text">Статус</span>
-              <select #statusSelect>
+              <select formControlName="statusId">
                 @for (status of statuses(); track status.id) {
-                  <option [selected]="status.id === order.status.id" [value]="status.id">
-                    {{ status.name }}
-                  </option>
+                  <option [value]="status.id">{{ status.name }}</option>
                 }
               </select>
             </label>
 
             <label class="form-field">
-              <span class="label-text">Код получения</span>
-              <input #receiveCodeInput type="number" [value]="order.receiveCode" />
+              <span class="label-text">Код получения (0 для случайного)</span>
+              <input type="number" formControlName="receiveCode" />
             </label>
 
             <label class="form-field">
               <span class="label-text">Дата заказа</span>
-              <input #orderDateInput type="datetime-local" [value]="order.orderDate.slice(0, 16)" />
+              <input type="datetime-local" formControlName="orderDate" />
             </label>
 
             <label class="form-field">
               <span class="label-text">Дата доставки</span>
-              <input
-                #deliveryDateInput
-                type="datetime-local"
-                [value]="order.deliveryDate.slice(0, 16)"
-              />
+              <input type="datetime-local" formControlName="deliveryDate" />
             </label>
 
             <label class="form-field full-width">
               <span class="label-text">Адрес доставки</span>
-              <select #addressSelect>
+              <select formControlName="addressId">
                 @for (address of addresses(); track address.id) {
-                  <option [selected]="address.id === order.address.id" [value]="address.id">
-                    {{ address.fullAddress }}
-                  </option>
+                  <option [value]="address.id">{{ address.fullAddress }}</option>
                 }
               </select>
             </label>
 
             <label class="form-field full-width">
               <span class="label-text">Пользователь</span>
-              <select #userSelect>
+              <select formControlName="userId">
                 @for (user of users(); track user.id) {
-                  <option [selected]="user.id === order.user.id" [value]="user.id">
-                    {{ user.username }} ({{ user.fullName }})
-                  </option>
+                  <option [value]="user.id">{{ user.username }} ({{ user.fullName }})</option>
                 }
               </select>
             </label>
@@ -62,21 +51,13 @@
         </section>
 
         <section class="form-group">
-          <div class="order-products-list">
-            @for (orederProduct of orderProducts(); track $index) {
-              <div class="product-item-row">
+          <div class="order-products-list" formArrayName="orderProducts">
+            @for (item of orderProductsArray.controls; track $index) {
+              <div class="product-item-row" [formGroupName]="$index">
                 <div class="item-info">
-                  <select
-                    class="item-select"
-                    [value]="orederProduct.product.article"
-                    (change)="updateItemProduct($index, prod.value)"
-                    #prod
-                  >
+                  <select class="item-select" formControlName="productArticle">
                     @for (product of products(); track product.article) {
-                      <option
-                        [selected]="product.article === orederProduct.product.article"
-                        [value]="product.article"
-                      >
+                      <option [value]="product.article">
                         #{{ product.article }} - {{ product.name }}
                       </option>
                     }
@@ -84,21 +65,14 @@
 
                   <div class="amount-control">
                     <span class="label-text">Кол-во:</span>
-                    <input
-                      class="item-amount-input"
-                      type="number"
-                      min="1"
-                      [value]="orederProduct.amount"
-                      (input)="updateItemAmount($index, amt.value)"
-                      #amt
-                    />
+                    <input class="item-amount-input" type="number" formControlName="amount" />
                   </div>
                 </div>
                 <button
                   type="button"
                   class="btn-icon-danger"
                   (click)="removeProduct($index)"
-                  title="Удалить товар"
+                  title="Удалить"
                 >
                   ✕
                 </button>
@@ -114,8 +88,8 @@
           <span class="summary-label">Итого к оплате:</span>
           <div class="summary-details">
             @let summary = totalPrice();
-            @if (totalPrice().subtotal != totalPrice().total) {
-              <span class="summary-subvalue">{{ totalPrice().subtotal | number: '1.2-2' }} ₽</span>
+            @if (summary.subtotal !== summary.total) {
+              <span class="summary-subvalue">{{ summary.subtotal | number: '1.2-2' }} ₽</span>
             }
             <span class="summary-value">{{ summary.total | number: '1.2-2' }} ₽</span>
           </div>
@@ -123,33 +97,14 @@
 
         <div class="actions">
           <button type="button" class="btn-primary" (click)="revertChanges()">Отменить</button>
-          <button
-            type="button"
-            class="btn-primary"
-            (click)="
-              submitForm({
-                id: idInput.value,
-                orderDate: orderDateInput.value,
-                deliveryDate: deliveryDateInput.value,
-                receiveCode: receiveCodeInput.value,
-                statusId: statusSelect.value,
-                addressId: addressSelect.value,
-                userId: userSelect.value,
-              })
-            "
-          >
-            Сохранить
-          </button>
-          @if (id() != 'new') {
+          <button type="submit" class="btn-primary">Сохранить</button>
+          @if (id() !== 'new') {
             <button type="button" class="btn-danger" (click)="deleteOrder()">Удалить заказ</button>
           }
         </div>
       </form>
     </div>
   } @else {
-    <div class="error-container">
-      Заказа с таким идентификатором не существует.<br />
-      Вы можете создать его в меню магазина.
-    </div>
+    <div class="error-container">Загрузка заказа или ошибка данных...</div>
   }
 </div>

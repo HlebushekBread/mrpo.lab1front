@@ -36,6 +36,12 @@ export interface Order {
   status: { id: number; name: string };
 }
 
+export interface UserOrderDto {
+  addressId: number;
+  userId: number;
+  orderProductDtos: OrderProductDto[];
+}
+
 export interface OrderDto {
   id: number;
   orderDate: string;
@@ -44,10 +50,7 @@ export interface OrderDto {
   statusId: number;
   addressId: number;
   userId: number;
-  orderProductDtos: {
-    productArticle: string;
-    amount: number;
-  }[];
+  orderProductDtos: OrderProductDto[];
 }
 
 export interface OrderProductDto {
@@ -71,6 +74,10 @@ export class OrderService {
 
   getByUserId(): Observable<Order[]> {
     return this.http.get<Order[]>(`http://localhost:8080/api/orders/get`);
+  }
+
+  makeOrder(data: UserOrderDto): Observable<{ id: number }> {
+    return this.http.post<{ id: number }>(`http://localhost:8080/api/orders/make`, data);
   }
 
   saveOrder(data: OrderDto): Observable<{ id: number }> {

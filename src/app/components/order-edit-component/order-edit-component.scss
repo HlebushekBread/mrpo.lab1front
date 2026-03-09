@@ -75,6 +75,14 @@ $font-family: 'Times New Roman', Times, serif;
       border-color: $accent-color;
       box-shadow: 0 0 0 3px rgba($accent-color, 0.2);
     }
+    &.ng-invalid.ng-touched {
+      border: 2px solid #fca5a5 !important;
+      background-color: #fef2f2;
+
+      &:focus {
+        box-shadow: 0 0 0 3px rgba(229, 62, 62, 0.2);
+      }
+    }
   }
 }
 
@@ -93,6 +101,11 @@ $font-family: 'Times New Roman', Times, serif;
   padding: 1rem;
   background: #f9f9f9;
   border-radius: $border-radius / 2;
+
+  &.ng-invalid.ng-touched {
+    border: 2px solid #fca5a5;
+    background-color: #fef2f2;
+  }
 
   .item-info {
     flex: 1;

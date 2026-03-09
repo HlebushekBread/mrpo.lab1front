@@ -37,6 +37,7 @@ $font-family: 'Times New Roman', Times, serif;
       object-fit: scale-down;
       border: 2px solid #eee;
       background-color: #fafafa;
+      transition: all 0.2s ease;
 
       &:hover {
         border-color: $accent-color;
@@ -188,39 +189,4 @@ $font-family: 'Times New Roman', Times, serif;
   text-align: center;
   border: 1px solid #ffcdd2;
   border-radius: 8px;
-}
-
-// Адаптивная верстка для мобильных устройств
-@media (max-width: 768px) {
-  .product-item {
-    grid-template-columns: 1fr;
-    grid-template-areas:
-      'main'
-      'controls'
-      'price';
-    text-align: center;
-    gap: 1.5rem;
-
-    .product-main {
-      grid-area: main;
-      flex-direction: column;
-      .product-image {
-        margin: 0 0 1rem 0;
-      }
-      .product-info {
-        width: 100%;
-      }
-    }
-
-    .cart-controls {
-      grid-area: controls;
-      margin: 0 auto;
-    }
-
-    .product-price {
-      grid-area: price;
-      text-align: center;
-      min-width: auto;
-    }
-  }
 }

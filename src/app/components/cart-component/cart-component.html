@@ -10,13 +10,24 @@
       <button class="clear-button" (click)="clearCart()">Очистить</button>
     </div>
 
+    <label class="form-field">
+      <span class="label-text">Адрес доставки</span>
+      <select #addressSelect>
+        @for (address of addresses(); track address.id) {
+          <option [value]="address.id">
+            {{ address.fullAddress }}
+          </option>
+        }
+      </select>
+    </label>
+
     <div class="product-list">
-      @for (item of fullCartItems(); track item.article) {
+      @for (item of fullCartItems(); track item.productArticle) {
         <div class="cart-item">
-          <app-cart-product-component [product]="item.product" [amount]="item.count">
+          <app-cart-product-component [product]="item.product" [amount]="item.amount">
           </app-cart-product-component>
           <div class="item-controls">
-            <button class="action-btn" (click)="removeItem(item.article)">X</button>
+            <button class="action-btn" (click)="removeItem(item.productArticle)">X</button>
           </div>
         </div>
       } @empty {
@@ -35,7 +46,11 @@
           <span class="summary-value">{{ summary.total | number: '1.2-2' }} ₽</span>
         </div>
       </div>
-      <button class="checkout-button" [disabled]="cartItems().length === 0" (click)="checkout()">
+      <button
+        class="checkout-button"
+        [disabled]="cartItems().length === 0"
+        (click)="checkout(addressSelect.value)"
+      >
         Оформить заказ
       </button>
     </div>

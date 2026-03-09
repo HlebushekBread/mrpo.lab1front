@@ -51,7 +51,8 @@ $font-family: 'Times New Roman', Times, serif;
     //border-left: 8px solid $primary-color;
 
     &.highlighted {
-      box-shadow: 0 4px 15px rgba(#7fff00, 1);
+      border: 2px $primary-color solid;
+      box-shadow: 0 4px 15px rgba($primary-color, 0.5);
     }
 
     .old-price {
