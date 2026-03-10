@@ -68,14 +68,17 @@ export class ProductList {
       );
     }
 
-    if (this.selectedCategory())
+    if (this.selectedCategory()) {
       list = list.filter((p) => p.category.id.toString() === this.selectedCategory());
+    }
 
-    if (this.selectedProvider())
+    if (this.selectedProvider()) {
       list = list.filter((p) => p.provider.id.toString() === this.selectedProvider());
+    }
 
-    if (this.selectedManufacturer())
+    if (this.selectedManufacturer()) {
       list = list.filter((p) => p.manufacturer.id.toString() === this.selectedManufacturer());
+    }
 
     if (this.onlyInStock()) {
       list = list.filter((p) => p.amount > 0);
@@ -101,16 +104,21 @@ export class ProductList {
   manufacturers = toSignal(this.manufacturerService.getAll(), { initialValue: [] });
   providers = toSignal(this.providerService.getAll(), { initialValue: [] });
 
-  elements = viewChildren<ElementRef>('card');
+  private elements = viewChildren<ElementRef>('card');
+  private wasScrolled = false;
 
   constructor() {
     effect(() => {
       const allElements = this.elements();
       const targetArticle = history.state.article;
 
-      if (allElements.length > 0 && targetArticle) {
+      if (!this.wasScrolled && allElements.length > 0 && targetArticle) {
         const target = allElements.find((el) => el.nativeElement.id === targetArticle);
-        target?.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+        if (target) {
+          target.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          this.wasScrolled = true;
+        }
       }
     });
   }

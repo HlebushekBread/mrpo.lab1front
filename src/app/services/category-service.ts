@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 interface category {
   id: number;
@@ -14,6 +15,6 @@ export class CategoryService {
   private http = inject(HttpClient);
 
   getAll(): Observable<category[]> {
-    return this.http.get<category[]>(`http://localhost:8080/api/categories/catalog`);
+    return this.http.get<category[]>(`${environment.apiUrl}/categories/catalog`);
   }
 }

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface Product {
   article: string;
@@ -22,22 +23,22 @@ export class ProductService {
   private http = inject(HttpClient);
 
   getAll(): Observable<Product[]> {
-    return this.http.get<Product[]>(`http://localhost:8080/api/products/get`);
+    return this.http.get<Product[]>(`${environment.apiUrl}/products/get`);
   }
 
   getAllArticles(): Observable<string[]> {
-    return this.http.get<string[]>(`http://localhost:8080/api/products/articles`);
+    return this.http.get<string[]>(`${environment.apiUrl}/products/articles`);
   }
 
   getByArticle(article: string): Observable<Product> {
-    return this.http.get<Product>(`http://localhost:8080/api/products/${article}`);
+    return this.http.get<Product>(`${environment.apiUrl}/products/${article}`);
   }
 
   saveProduct(data: FormData): Observable<{ article: string }> {
-    return this.http.put<{ article: string }>(`http://localhost:8080/api/products/save`, data);
+    return this.http.put<{ article: string }>(`${environment.apiUrl}/products/save`, data);
   }
 
   deleteProduct(article: string): Observable<void> {
-    return this.http.delete<void>(`http://localhost:8080/api/products/delete/${article}`);
+    return this.http.delete<void>(`${environment.apiUrl}/products/delete/${article}`);
   }
 }

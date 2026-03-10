@@ -1,16 +1,13 @@
 <div class="wrapper-container">
-  @if (product(); as product) {
+  @if (productForm) {
     <div class="product-card">
+      <!-- Image Section без изменений, только убрали лишние переменные -->
       <div class="image-section">
-        @if (previewUrl()) {
-          <img [src]="previewUrl()" class="product-image" />
-        } @else {
-          <img
-            [src]="imageUrl().url"
-            (error)="$event.target.src = 'placeholder.png'"
-            class="product-image"
-          />
-        }
+        <img
+          [src]="previewUrl() || imageUrl().url"
+          class="product-image"
+          (error)="$event.target.src = 'placeholder.png'"
+        />
         <input
           type="file"
           #fileInput
@@ -21,83 +18,69 @@
         <button type="button" class="btn-upload" (click)="fileInput.click()">
           Загрузить изображение
         </button>
-        @if (errorMessage()) {
-          <div class="error-container">{{ errorMessage() }}</div>
-        }
       </div>
 
-      <form class="form-section">
+      <form class="form-section" [formGroup]="productForm" (ngSubmit)="submitForm()">
         <div class="form-grid">
-          <input type="hidden" #articleInput readonly [value]="product.article" />
+          <input type="hidden" formControlName="article" />
 
           <label class="form-field">
             <span class="label-text">Название</span>
-            <input type="text" #nameInput [value]="product.name" />
+            <input type="text" formControlName="name" />
           </label>
 
           <label class="form-field">
             <span class="label-text">Категория</span>
-            <select #categoryInput>
-              @for (category of categories(); track category.id) {
-                <option [selected]="category.id === product.category.id" [value]="category.id">
-                  {{ category.name }}
-                </option>
+            <select formControlName="categoryId">
+              @for (cat of categories(); track cat.id) {
+                <option [value]="cat.id">{{ cat.name }}</option>
               }
             </select>
           </label>
 
           <label class="form-field full-width">
             <span class="label-text">Описание</span>
-            <textarea #descriptionInput rows="4">{{ product.description }}</textarea>
+            <textarea formControlName="description" rows="4"></textarea>
           </label>
 
           <label class="form-field">
             <span class="label-text">Производитель</span>
-            <select #manufacturerInput>
-              @for (manufacturer of manufacturers(); track manufacturer.id) {
-                <option
-                  [selected]="manufacturer.id === product.manufacturer.id"
-                  [value]="manufacturer.id"
-                >
-                  {{ manufacturer.name }}
-                </option>
+            <select formControlName="manufacturerId">
+              @for (m of manufacturers(); track m.id) {
+                <option [value]="m.id">{{ m.name }}</option>
               }
             </select>
           </label>
 
           <label class="form-field">
             <span class="label-text">Поставщик</span>
-            <select #providerInput>
-              @for (provider of providers(); track provider.id) {
-                <option [selected]="provider.id === product.provider.id" [value]="provider.id">
-                  {{ provider.name }}
-                </option>
+            <select formControlName="providerId">
+              @for (p of providers(); track p.id) {
+                <option [value]="p.id">{{ p.name }}</option>
               }
             </select>
           </label>
 
           <label class="form-field">
             <span class="label-text">Цена (₽)</span>
-            <input type="number" #priceInput [value]="product.price" />
+            <input type="number" formControlName="price" />
           </label>
 
           <label class="form-field">
             <span class="label-text">Скидка (%)</span>
-            <input type="number" #discountInput [value]="product.discount" />
+            <input type="number" formControlName="discount" />
           </label>
 
           <label class="form-field">
             <span class="label-text">Остаток</span>
-            <input type="number" #amountInput [value]="product.amount" />
+            <input type="number" formControlName="amount" />
           </label>
 
           <label class="form-field">
             <span class="label-text">Ед. измерения</span>
-            <select #unitInput>
-              @for (unit of units(); track unit.id) {
-                <option [selected]="unit.id === product.unit.id" [value]="unit.id">
-                  {{ unit.name }}
-                </option>
+            <select formControlName="unitId">
+              @for (u of units(); track u.id) {
+                <option [value]="u.id">{{ u.name }}</option>
               }
             </select>
           </label>
@@ -105,36 +88,14 @@
 
         <div class="actions">
           <button type="button" class="btn-primary" (click)="revertChanges()">Отменить</button>
-          <button
-            type="button"
-            class="btn-primary"
-            (click)="
-              submitForm({
-                article: articleInput.value,
-                name: nameInput.value,
-                categoryId: categoryInput.value,
-                description: descriptionInput.value,
-                manufacturerId: manufacturerInput.value,
-                providerId: providerInput.value,
-                price: priceInput.value,
-                discount: discountInput.value,
-                amount: amountInput.value,
-                unitId: unitInput.value,
-              })
-            "
-          >
-            Подтвердить
-          </button>
-          @if (article() != 'new') {
+          <button type="submit" class="btn-primary">Подтвердить</button>
+          @if (article() !== 'new') {
             <button type="button" class="btn-danger" (click)="deleteProduct()">Удалить</button>
           }
         </div>
       </form>
     </div>
   } @else {
-    <div class="error-container">
-      Товара с таким артикулем не существует.<br />
-      Вы можете создать его в меню магазина.
-    </div>
+    <div class="error-container">Товара с таким артикулем не существует</div>
   }
 </div>

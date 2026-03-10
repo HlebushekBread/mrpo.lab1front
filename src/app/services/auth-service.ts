@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { tap } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 interface token {
   token: string;
@@ -15,7 +16,7 @@ export class AuthService {
   private http = inject(HttpClient);
 
   login(user: { username: string; password: string }) {
-    return this.http.post('http://localhost:8080/api/auth/login', user).pipe(
+    return this.http.post(`${environment.apiUrl}/auth/login`, user).pipe(
       tap((response) => {
         this.doLoginUser(response as token);
       }),

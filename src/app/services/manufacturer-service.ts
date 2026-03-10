@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 interface manufacturer {
   id: number;
@@ -14,6 +15,6 @@ export class ManufacturerService {
   private http = inject(HttpClient);
 
   getAll(): Observable<manufacturer[]> {
-    return this.http.get<manufacturer[]>(`http://localhost:8080/api/manufacturers/catalog`);
+    return this.http.get<manufacturer[]>(`${environment.apiUrl}/manufacturers/catalog`);
   }
 }

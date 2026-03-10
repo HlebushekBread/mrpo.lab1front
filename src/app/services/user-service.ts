@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 interface User {
   id: number;
@@ -19,6 +20,6 @@ export class UserService {
   private http = inject(HttpClient);
 
   getAllUserUsers(): Observable<User[]> {
-    return this.http.get<User[]>(`http://localhost:8080/api/users/users`);
+    return this.http.get<User[]>(`${environment.apiUrl}/users/users`);
   }
 }

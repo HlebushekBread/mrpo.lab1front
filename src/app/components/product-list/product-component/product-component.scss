@@ -162,6 +162,7 @@ $font-family: 'Times New Roman', Times, serif;
         font-size: 1.2rem;
         border-top: 2px solid $border-color;
         padding-top: 8px;
+        margin-bottom: 10px;
         color: $text-color;
 
         strong {
@@ -244,8 +245,8 @@ $font-family: 'Times New Roman', Times, serif;
     .discount-container {
       display: flex;
       align-items: center;
+      max-height: 95%;
       justify-content: center;
-      max-height: 300px;
       border-radius: $border-radius;
       border: solid $border-color 2px;
 

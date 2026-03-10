@@ -121,7 +121,6 @@ export class OrderEditComponent implements OnInit {
   submitForm() {
     if (this.orderForm.invalid) {
       this.orderForm.markAllAsTouched();
-      console.log('Форма невалидна, подсветка активирована');
       return;
     }
 

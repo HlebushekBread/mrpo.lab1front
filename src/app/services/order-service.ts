@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface Order {
   id: number;
@@ -65,26 +66,26 @@ export class OrderService {
   private http = inject(HttpClient);
 
   getAll(): Observable<Order[]> {
-    return this.http.get<Order[]>(`http://localhost:8080/api/orders/all`);
+    return this.http.get<Order[]>(`${environment.apiUrl}/orders/all`);
   }
 
   getById(id: string): Observable<Order> {
-    return this.http.get<Order>(`http://localhost:8080/api/orders/${id}`);
+    return this.http.get<Order>(`${environment.apiUrl}/orders/${id}`);
   }
 
   getByUserId(): Observable<Order[]> {
-    return this.http.get<Order[]>(`http://localhost:8080/api/orders/get`);
+    return this.http.get<Order[]>(`${environment.apiUrl}/orders/get`);
   }
 
   makeOrder(data: UserOrderDto): Observable<{ id: number }> {
-    return this.http.post<{ id: number }>(`http://localhost:8080/api/orders/make`, data);
+    return this.http.post<{ id: number }>(`${environment.apiUrl}/orders/make`, data);
   }
 
   saveOrder(data: OrderDto): Observable<{ id: number }> {
-    return this.http.put<{ id: number }>(`http://localhost:8080/api/orders/save`, data);
+    return this.http.put<{ id: number }>(`${environment.apiUrl}/orders/save`, data);
   }
 
   deleteOrder(id: number): Observable<void> {
-    return this.http.delete<void>(`http://localhost:8080/api/orders/delete/${id}`);
+    return this.http.delete<void>(`${environment.apiUrl}/orders/delete/${id}`);
   }
 }
