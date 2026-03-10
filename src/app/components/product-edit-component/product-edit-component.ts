@@ -90,6 +90,8 @@ export class ProductEditComponent implements OnInit {
       this.selectedFile = file;
       if (this.previewUrl()) URL.revokeObjectURL(this.previewUrl()!);
       this.previewUrl.set(URL.createObjectURL(file));
+    } else {
+      this.errorMessage = signal('Некорректный формат изображения');
     }
   }
 
