@@ -29,12 +29,13 @@
 
           <label class="form-field">
             <span class="label-text">Название</span>
-            <input type="text" formControlName="name" />
+            <input type="text" formControlName="name" placeholder="Название" />
           </label>
 
           <label class="form-field">
             <span class="label-text">Категория</span>
             <select formControlName="categoryId">
+              <option [value]="null" disabled selected>Выберите категорию</option>
               @for (cat of categories(); track cat.id) {
                 <option [value]="cat.id">{{ cat.name }}</option>
               }
@@ -43,12 +44,13 @@
 
           <label class="form-field full-width">
             <span class="label-text">Описание</span>
-            <textarea formControlName="description" rows="4"></textarea>
+            <textarea formControlName="description" rows="4" placeholder="Описание"></textarea>
           </label>
 
           <label class="form-field">
             <span class="label-text">Производитель</span>
             <select formControlName="manufacturerId">
+              <option [value]="null" disabled selected>Выберите производителя</option>
               @for (m of manufacturers(); track m.id) {
                 <option [value]="m.id">{{ m.name }}</option>
               }
@@ -58,6 +60,7 @@
           <label class="form-field">
             <span class="label-text">Поставщик</span>
             <select formControlName="providerId">
+              <option [value]="null" disabled selected>Выберите поставщика</option>
               @for (p of providers(); track p.id) {
                 <option [value]="p.id">{{ p.name }}</option>
               }
@@ -82,6 +85,7 @@
           <label class="form-field">
             <span class="label-text">Ед. измерения</span>
             <select formControlName="unitId">
+              <option [value]="null" disabled selected>Выберите ед. измерения</option>
               @for (u of units(); track u.id) {
                 <option [value]="u.id">{{ u.name }}</option>
               }

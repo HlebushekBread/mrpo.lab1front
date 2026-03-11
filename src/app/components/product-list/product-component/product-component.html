@@ -41,19 +41,23 @@
         </div>
 
         @if (isMakeOrders()) {
-          <div class="cart-controls">
-            @if (getProductCount(product().article) === 0) {
-              <button class="add-to-cart-btn" (click)="addToCart(product().article)">
-                В корзину
-              </button>
-            } @else {
-              <div class="counter-container">
-                <button (click)="decrementCount(product().article)">−</button>
-                <span class="count-value">{{ getProductCount(product().article) }}</span>
-                <button (click)="incrementCount(product().article)">+</button>
-              </div>
-            }
-          </div>
+          @if (product().amount) {
+            <div class="cart-controls">
+              @if (getProductCount(product().article) === 0) {
+                <button class="add-to-cart-btn" (click)="addToCart(product().article)">
+                  В корзину
+                </button>
+              } @else {
+                <div class="counter-container">
+                  <button (click)="decrementCount(product().article)">−</button>
+                  <span class="count-value">{{ getProductCount(product().article) }}</span>
+                  <button (click)="incrementCount(product().article)">+</button>
+                </div>
+              }
+            </div>
+          } @else {
+            <div class="cart-controls">(Нет в наличии)</div>
+          }
         }
       </div>
 

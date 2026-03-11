@@ -85,13 +85,15 @@ export class OrderEditComponent implements OnInit {
     this.orderForm.setControl('orderProducts', this.formBuilder.array(productControls));
   }
 
-  addProduct() {
-    const product = this.products()[0];
-    if (!product) return;
+  isProductSelected(article: string): boolean {
+    const items = this.orderForm.get('orderProducts')?.value || [];
+    return items.some((item: OrderProductDto) => item.productArticle === article);
+  }
 
+  addProduct() {
     this.orderProductsArray.push(
       this.formBuilder.group({
-        productArticle: [product.article, Validators.required],
+        productArticle: [null, Validators.required],
         amount: [1, [Validators.required, Validators.min(1)]],
       }),
     );

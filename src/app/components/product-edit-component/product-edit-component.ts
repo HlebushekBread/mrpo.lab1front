@@ -35,24 +35,24 @@ export class ProductEditComponent implements OnInit {
   readonly providers = toSignal(this.providerService.getAll(), { initialValue: [] });
 
   article = input.required<string>();
+  article$ = toObservable(this.article);
   errorMessage = signal('');
   previewUrl = signal<string | null>(null);
   selectedFile: File | null = null;
 
   ngOnInit(): void {
-    if (this.article() === 'new') {
-      this.initForm({ article: '000000' } as Product);
-    } else {
-      this.productService.getByArticle(this.article()).subscribe((p) => {
-        this.product.set(p);
-        this.initForm(p);
-      });
+    if (this.article() !== 'new') {
+      this.article$
+        .pipe(switchMap((article) => this.productService.getByArticle(article)))
+        .subscribe((product) => {
+          this.patchForm(product);
+        });
     }
   }
 
   productForm: FormGroup = this.formBuilder.group({
-    article: [''],
-    name: ['', [Validators.required]],
+    article: ['000000'],
+    name: ['Название', [Validators.required]],
     categoryId: [null, [Validators.required]],
     description: [''],
     manufacturerId: [null, [Validators.required]],
@@ -63,7 +63,7 @@ export class ProductEditComponent implements OnInit {
     unitId: [null, [Validators.required]],
   });
 
-  private initForm(p: Product) {
+  private patchForm(p: Product) {
     this.productForm.patchValue({
       article: p.article,
       name: p.name,
