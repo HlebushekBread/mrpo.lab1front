@@ -52,9 +52,9 @@ export class ProductEditComponent implements OnInit {
 
   productForm: FormGroup = this.formBuilder.group({
     article: ['000000'],
-    name: ['Название', [Validators.required]],
+    name: [null, [Validators.required]],
     categoryId: [null, [Validators.required]],
-    description: [''],
+    description: [null],
     manufacturerId: [null, [Validators.required]],
     providerId: [null, [Validators.required]],
     price: [0, [Validators.required, Validators.min(0)]],
