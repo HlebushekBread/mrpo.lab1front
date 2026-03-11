@@ -1,7 +1,7 @@
-import { Component, inject, input, OnInit, signal } from '@angular/core';
+import { Component, computed, inject, input, OnInit, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { ImageService } from '../../services/image-service';
-import { switchMap } from 'rxjs';
+import { filter, switchMap } from 'rxjs';
 import { Product, ProductService } from '../../services/product-service';
 import { CommonModule } from '@angular/common';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
@@ -10,6 +10,7 @@ import { CategoryService } from '../../services/category-service';
 import { ManufacturerService } from '../../services/manufacturer-service';
 import { ProviderService } from '../../services/provider-service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { OrderProductService } from '../../services/order-product-service';
 
 @Component({
   selector: 'app-product-edit-component',
@@ -26,6 +27,7 @@ export class ProductEditComponent implements OnInit {
   private providerService = inject(ProviderService);
   private imageService = inject(ImageService);
   private productService = inject(ProductService);
+  private orderProductService = inject(OrderProductService);
 
   readonly units = toSignal(this.unitService.getAll(), { initialValue: [] });
   readonly categories = toSignal(this.categoryService.getAll(), { initialValue: [] });
@@ -91,7 +93,7 @@ export class ProductEditComponent implements OnInit {
       if (this.previewUrl()) URL.revokeObjectURL(this.previewUrl()!);
       this.previewUrl.set(URL.createObjectURL(file));
     } else {
-      this.errorMessage = signal('Некорректный формат изображения');
+      this.errorMessage.set('Некорректный формат изображения');
     }
   }
 
@@ -119,9 +121,27 @@ export class ProductEditComponent implements OnInit {
     this.router.navigate(['/products']);
   }
 
+  productOrders = toSignal(
+    toObservable(this.article).pipe(
+      filter((article) => article !== 'new'),
+      switchMap((article) => this.orderProductService.getOrderIdsByProductArticle(article)),
+    ),
+    { initialValue: [] },
+  );
+  isDeletePossible = computed(() => {
+    const orders = this.productOrders();
+    return orders ? orders.length === 0 : false;
+  });
+  isDeleteModalOpen = signal(false);
+
+  openConfirmation() {
+    this.isDeleteModalOpen.set(true);
+  }
+
   deleteProduct() {
     this.productService.deleteProduct(this.article()).subscribe({
       next: () => {
+        this.isDeleteModalOpen.set(false);
         this.router.navigate(['/products']);
       },
       error: (err) => console.error('Ошибка Spring:', err),

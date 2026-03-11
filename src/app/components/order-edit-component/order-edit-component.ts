@@ -140,6 +140,12 @@ export class OrderEditComponent implements OnInit {
     this.router.navigate(['/orders']);
   }
 
+  isDeleteModalOpen = signal(false);
+
+  openConfirmation() {
+    this.isDeleteModalOpen.set(true);
+  }
+
   deleteOrder() {
     this.orderService.deleteOrder(Number(this.id())).subscribe({
       next: () => {

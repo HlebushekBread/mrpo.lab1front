@@ -99,11 +99,28 @@
           <button type="button" class="btn-primary" (click)="revertChanges()">Отменить</button>
           <button type="submit" class="btn-primary">Сохранить</button>
           @if (id() !== 'new') {
-            <button type="button" class="btn-danger" (click)="deleteOrder()">Удалить заказ</button>
+            <button type="button" class="btn-danger" (click)="openConfirmation()">
+              Удалить заказ
+            </button>
           }
         </div>
       </form>
     </div>
+    @if (isDeleteModalOpen()) {
+      <div class="modal-backdrop">
+        <div class="modal-content">
+          <h3>Предупреждение</h3>
+          <p>
+            Удалить заказ #{{ this.id() }}?<br />
+            Это действие нельзя отменить.
+          </p>
+          <div class="modal-actions">
+            <button (click)="isDeleteModalOpen.set(false)">Отмена</button>
+            <button class="btn-danger" (click)="deleteOrder()">Удалить</button>
+          </div>
+        </div>
+      </div>
+    }
   } @else {
     <div class="error-container">Загрузка заказа или ошибка данных...</div>
   }
